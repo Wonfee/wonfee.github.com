@@ -108,12 +108,11 @@ tree -L <span class="number">1</span>
 └── themes
 
 
-export PATH=export PATH=/home/wonfee/wonfee/hexo/node_modules/hexo/<span class="keyword">bin</span>:$PATH
-js hexo init</span>
+js node_modules/hexo/<span class="keyword">bin</span>/hexo init</span>
 </code></pre><p>本地测试：</p>
-<pre><code>js hexo <span class="keyword">g</span>
-js hexo <span class="literal">s</span>
-http:<span class="comment">//localhost:4000/</span>
+<pre><code>js node_modules<span class="regexp">/hexo/</span>bin/hexo g
+js node_modules<span class="regexp">/hexo/</span>bin/hexo s
+<span class="string">http:</span><span class="comment">//localhost:4000/</span>
 </code></pre><p>github 测试：</p>
 <pre><code>vim _config<span class="class">.yml</span>
 
@@ -123,21 +122,21 @@ deploy:
   branch: master
 
 npm install hexo-deployer-git --save
-js hexo g
-js hexo d
+js node_modules/hexo/bin/hexo g
+js node_modules/hexo/bin/hexo d
 </code></pre><p>写博客：</p>
-<pre><code><span class="title">js</span> hexo n <span class="string">"My First Post"</span>
+<pre><code><span class="label">js</span> node_modules/hexo/<span class="keyword">bin/hexo </span>n <span class="string">"My First Post"</span>
 </code></pre><p>编辑生成的 .md文件:</p>
-<pre><code>source/_posts/My-First-<span class="keyword">Post</span>.md
-js hexo <span class="keyword">g</span>
-js hexo <span class="literal">d</span>
+<pre><code>source<span class="regexp">/_posts/</span>My-First-Post.md
+js node_modules<span class="regexp">/hexo/</span>bin/hexo g
+js node_modules<span class="regexp">/hexo/</span>bin/hexo d
 </code></pre><p><a href="http://wonfee.github.io">My Home Page</a></p>
 <p>推荐博文编辑工具：<br><a href="https://www.zybuluo.com/cmd/" target="_blank" rel="external">Cmd Markdown</a><br><a href="http://www.jianshu.com/writer#/" target="_blank" rel="external">简书</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cib54ra8e0001tvhja25t4ptj" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cib54u7z30001w1hj0vra04z8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -240,7 +239,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cib54ra7s0000tvhj8bb3o0il" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cib54u7yh0000w1hjoytzfcp6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -347,7 +346,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cib54ra8g0003tvhj5rpccaa2" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cib54u7z50003w1hjh1yqanlm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -392,7 +391,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cib54ra8f0002tvhj4nipz6uy" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cib54u7z40002w1hjzp61wbtb" class="article-share-link">Share</a>
       
       
     </footer>
