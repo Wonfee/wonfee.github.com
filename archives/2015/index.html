@@ -65,93 +65,343 @@
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/20/hexo-install/" class="archive-article-date">
-  <time datetime="2015-06-20T05:57:35.000Z" itemprop="datePublished">6月 20</time>
+    <article id="post-hexo-install" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/20/hexo-install/" class="article-date">
+  <time datetime="2015-06-20T05:57:35.000Z" itemprop="datePublished">2015-06-20</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/20/hexo-install/">hexo install</a>
+      <a class="article-title" href="/2015/06/20/hexo-install/">hexo install</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/20/Linux-0-11-compile/" class="archive-article-date">
-  <time datetime="2015-06-20T03:46:49.000Z" itemprop="datePublished">6月 20</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
+        <h1 id="搭建_hexo_blog">搭建 hexo blog</h1><p>标签（空格分隔）： other</p>
+<hr>
+<p>安装 hexo：</p>
+<pre><code>mkdir hexo &amp;&amp; cd hexo
+sudo apt-get <span class="operator"><span class="keyword">install</span> npm
+npm <span class="keyword">install</span> hexo <span class="comment">--save</span>
+npm <span class="keyword">install</span> hexo-<span class="keyword">server</span> <span class="comment">--save</span>
+npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span>
+
+tree -L <span class="number">1</span>
+.
+├── _config.yml
+├── db.json
+├── node_modules
+├── package.json
+├── <span class="keyword">public</span>
+├── scaffolds
+├── source
+└── themes
+
+
+export PATH=export PATH=/home/wonfee/wonfee/hexo/node_modules/hexo/<span class="keyword">bin</span>:$PATH
+js hexo init</span>
+</code></pre><p>本地测试：</p>
+<pre><code>js hexo <span class="keyword">g</span>
+js hexo <span class="literal">s</span>
+http:<span class="comment">//localhost:4000/</span>
+</code></pre><p>github 测试：</p>
+<pre><code>vim _config<span class="class">.yml</span>
+
+deploy:
+  type: git
+  repo: git@github<span class="class">.com</span>:Wonfee/wonfee<span class="class">.github</span><span class="class">.io</span><span class="class">.git</span>
+  branch: master
+
+npm install hexo-deployer-git --save
+js hexo g
+js hexo d
+</code></pre><p>写博客：</p>
+<pre><code><span class="title">js</span> hexo n <span class="string">"My First Post"</span>
+</code></pre><p>编辑生成的 .md文件:</p>
+<pre><code>source/_posts/My-First-<span class="keyword">Post</span>.md
+js hexo <span class="keyword">g</span>
+js hexo <span class="literal">d</span>
+</code></pre><p><a href="http://wonfee.github.io">My Home Page</a></p>
+<p>推荐博文编辑工具：<br><a href="https://www.zybuluo.com/cmd/" target="_blank" rel="external">Cmd Markdown</a><br><a href="http://www.jianshu.com/writer#/" target="_blank" rel="external">简书</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cib4o6zoq0001hvhj3usn37za" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux-0-11-compile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/20/Linux-0-11-compile/" class="article-date">
+  <time datetime="2015-06-20T03:46:49.000Z" itemprop="datePublished">2015-06-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/20/Linux-0-11-compile/">Linux-0.11 compile</a>
+      <a class="article-title" href="/2015/06/20/Linux-0-11-compile/">Linux-0.11 compile</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/19/My-First-Post/" class="archive-article-date">
-  <time datetime="2015-06-19T08:10:59.000Z" itemprop="datePublished">6月 19</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
+        <p>Linux-0.11 编译</p>
+<p>参考链接： <a href="http://www.tinylab.org/take-5-minutes-to-build-linux-0-11-experiment-envrionment/" target="_blank" rel="external">泰晓科技</a></p>
+<h3 id="编译环境">编译环境</h3><pre><code>cat /etc/issue
+Ubuntu <span class="number">14.04</span>.<span class="number">2</span> LTS
+uname -a
+Linux wonfee-ThinkPad-T540p <span class="number">3.16</span>.<span class="number">7</span>-ckt5my-very-own-kernel <span class="built_in">#</span><span class="number">1</span> SMP Fri Feb <span class="number">27</span> <span class="number">23</span>:<span class="number">04</span>:<span class="number">29</span> CST <span class="number">2015</span> x86_64 x86_64 x86_64 GNU/Linux
+gcc -v
+gcc <span class="built_in">version</span> <span class="number">4.4</span>.<span class="number">7</span> <span class="params">(Ubuntu/Linaro <span class="number">4.4</span>.<span class="number">7</span>-<span class="number">8</span>ubuntu1)</span>
+qemu-x86_64 -<span class="built_in">version</span>
+qemu-x86_64 <span class="built_in">version</span> <span class="number">2.0</span>.<span class="number">0</span> <span class="params">(Debian <span class="number">2.0</span>.<span class="number">0</span>+dfsg-<span class="number">2</span>ubuntu1.<span class="number">10</span>)</span>, Copyright <span class="params">(c)</span> <span class="number">2003</span>-<span class="number">2008</span> Fabrice Bellard 
+</code></pre><p>下载：</p>
+<pre><code>git clone <span class="string">https:</span><span class="comment">//gitlab.com/tinylab/linux-0.11.git</span>
+</code></pre><p>编译：</p>
+<p>cd linux-0.11 &amp;&amp; make</p>
+<p>硬盘启动：</p>
+<pre><code>make <span class="built_in">start</span>-hd
+</code></pre><p>硬盘启动调试:</p>
+<pre><code>make debug-hd
+gdb images/kernel<span class="class">.sym</span>
+(gdb) target remote :<span class="number">1234</span>
+(gdb) <span class="tag">b</span> main
+(gdb) c
+</code></pre><p>查阅文档<br>[README.md]</p>
+<pre><code> make <span class="operator"><span class="keyword">help</span> 
+&lt;&lt;&lt;&lt;This <span class="keyword">is</span> the basic <span class="keyword">help</span> info <span class="keyword">of</span> linux-<span class="number">0.11</span>&gt;&gt;&gt;
+
+<span class="keyword">Usage</span>:
+     make <span class="comment">--generate a kernel floppy Image with a fs on hda1</span>
+     make <span class="keyword">start</span> <span class="comment">-- start the kernel in vm (qemu/bochs)</span>
+     make <span class="keyword">start</span>-fd <span class="comment">-- start the kernel with fs in floppy</span>
+     make <span class="keyword">start</span>-hd <span class="comment">-- start the kernel with fs in hard disk</span>
+     make debug <span class="comment">-- debug the kernel in qemu/bochs &amp; gdb at port 1234</span>
+     make debug-fd <span class="comment">-- debug the kernel with fs in floppy</span>
+     make debug-hd <span class="comment">-- debug the kernel with fs in hard disk</span>
+     make disk  <span class="comment">-- generate a kernel Image &amp; copy it to floppy</span>
+     make cscope <span class="comment">-- genereate the cscope index databases</span>
+     make tags <span class="comment">-- generate the tag file</span>
+     make cg <span class="comment">-- generate callgraph of the default main entry</span>
+     make cg f=func d=dir|file b=browser <span class="comment">-- generate callgraph of func in file/directory</span>
+     make clean <span class="comment">-- clean the object files</span>
+     make distclean <span class="comment">-- only keep the source code files</span>
+
+Note!:
+     * You need <span class="keyword">to</span> <span class="keyword">install</span> the following basic tools:
+          ubuntu|debian, qemu|bochs, ctags, cscope, calltree, cflow, graphviz 
+          vim-<span class="keyword">full</span>, build-essential, <span class="keyword">hex</span>, dd, gcc <span class="number">4.3</span>.2...
+     * Becarefull <span class="keyword">to</span> <span class="keyword">change</span> the compiling options, which will heavily
+     influence the compiling <span class="keyword">procedure</span> <span class="keyword">and</span> running result.
+
+Author:
+     * <span class="number">1991</span>, linus <span class="keyword">write</span> <span class="keyword">and</span> <span class="keyword">release</span> the original linux <span class="number">0.95</span>(linux <span class="number">0.11</span>).
+     * <span class="number">2005</span>, jiong.zhao&lt;gohigh@sh163.net&gt; <span class="keyword">release</span> a new <span class="keyword">version</span> 
+     which can be used <span class="keyword">in</span> RedHat <span class="number">9</span> along <span class="keyword">with</span> the book <span class="string">'Explaining 
+     Linux-0.11 Completly'</span>, <span class="keyword">and</span> he build a site http://www.oldlinux.org
+     * <span class="number">2008</span>, falcon&lt;wuzhangjin@gmail.com&gt; <span class="keyword">release</span> a new <span class="keyword">version</span> which can be
+     used <span class="keyword">in</span> ubuntu|debian <span class="number">32</span><span class="built_in">bit</span>|<span class="number">64</span><span class="built_in">bit</span> <span class="keyword">with</span> gcc <span class="number">4.3</span>.2, <span class="keyword">and</span> give <span class="keyword">some</span> new 
+     features <span class="keyword">for</span> experimenting. such <span class="keyword">as</span> this <span class="keyword">help</span> info, boot/bootsect.s <span class="keyword">and</span>
+     boot/setup.s <span class="keyword">with</span> <span class="keyword">AT</span>&amp;T rewritting, porting <span class="keyword">to</span> gcc <span class="number">4.3</span>.2 :-)
+     * <span class="number">2011</span>, tigercn&lt;moonlight.yang@gmail.com&gt; port <span class="keyword">to</span> new system <span class="keyword">and</span> gcc.
+     * <span class="number">2012</span>, yuanxinyu&lt;yuanxinyu.hangzhou@gmail.com&gt; <span class="keyword">add</span> Mac OS X support.
+     * <span class="number">2015</span>, falcon &lt;wuzhangjin@gmail.com&gt; back reorganize <span class="keyword">and</span> maintain it.
+
+&lt;&lt;&lt;Be Happy <span class="keyword">To</span> Play <span class="keyword">With</span> It :-)&gt;&gt;&gt;</span>
+</code></pre><p>生成函数调用关系图:</p>
+<pre><code>sudo apt-<span class="built_in">get</span> install graphviz
+<span class="keyword">make</span> <span class="keyword">cg</span>
+<span class="keyword">display</span> callgraph/main.__init_main_c.svg
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cib4o6zo60000hvhjsa7f03fv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-My-First-Post" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/19/My-First-Post/" class="article-date">
+  <time datetime="2015-06-19T08:10:59.000Z" itemprop="datePublished">2015-06-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/19/My-First-Post/">Markdown 常用语法</a>
+      <a class="article-title" href="/2015/06/19/My-First-Post/">Markdown 常用语法</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/19/hello-world/" class="archive-article-date">
-  <time datetime="2015-06-19T07:30:30.000Z" itemprop="datePublished">6月 19</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
+        <h1 id="Markdown_语法讲解">Markdown 语法讲解</h1><p>标题使用 ：<br>只需要在文本前面加上#即可，同理、你还可以增加二级标题、三级标题、四级标题、五级标题和六级标题，总共六级，如下所示：</p>
+<h1 id="一级标题">一级标题</h1><h2 id="二级标题">二级标题</h2><h3 id="三级标题">三级标题</h3><h4 id="四级标题">四级标题</h4><h4 id="五级标题">五级标题</h4><h5 id="六级标题">六级标题</h5><p>备注： “#” 和 [标题] 之间留有一个空格，次为markdown标准语法</p>
+<p>列表使用：<br>在 Markdown 中，你只需要在文字前面加上 - 就可以了，例如：</p>
+<ul>
+<li>文本1</li>
+<li>文本2</li>
+<li>文本3</li>
+</ul>
+<p>链接和图片使用：<br>链接：<br><a href="http://jianshu.io" target="_blank" rel="external">简书</a><br><a href="https://www.zybuluo.com/cmd/" target="_blank" rel="external">Cmd Markdown</a><br>图片：<br><img src="http://ww4.sinaimg.cn/bmiddle/aa397b7fjw1dzplsgpdw5j.jpg" alt=""></p>
+<p>备注：插入图片的语法和链接的语法很像，只是前面多了一个 ！</p>
+<p>引用：<br>在 Markdown 中，只需要在希望引用的文字前面加上 &gt;就可以引用他人的文字， 如：</p>
+<blockquote>
+<p>一盏灯， 一片昏黄； 一简书， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。</p>
+</blockquote>
+<p>诗歌引用：</p>
+<blockquote>
+<p>大漠孤烟直<br>长河落日圆</p>
+</blockquote>
+<p>粗体和斜体：<br>Markdown 的粗体和斜体也非常简单，用两个 * 包含一段文本就是粗体的语法，用一个 * 包含一段文本就是斜体的语法。例如：<br><strong>大漠孤烟直</strong><br><em>长河落日圆</em></p>
+<p>表格使用：</p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Are</th>
+<th style="text-align:right">Cool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
+<tr>
+<td>zebra stripes</td>
+<td style="text-align:center">are neat</td>
+<td style="text-align:right">$1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>dog</th>
+<th>bird</th>
+<th>cat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>foo</td>
+<td>foo</td>
+<td>foo</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bar</td>
+<td>bar</td>
+<td>bar</td>
+</tr>
+</tbody>
+</table>
+<p>以上几种格式是比较常用的格式，Markdown 还有其他语法，如想了解和学习更多，可以参考这篇<a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">『Markdown 语法说明』</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cib4o6zox0003hvhj5lm4c0hs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/19/hello-world/" class="article-date">
+  <time datetime="2015-06-19T07:30:30.000Z" itemprop="datePublished">2015-06-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/19/hello-world/">Hello World</a>
+      <a class="article-title" href="/2015/06/19/hello-world/">Hello World</a>
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cib4o6zov0002hvhjwvxhrfj6" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
 </article>
+
+
   
-  
-    </div></section>
   
 </section>
         
