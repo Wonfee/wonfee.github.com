@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>linux_driver_module | Wonfee&#39;s HomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="linux device driver tutorialThe first driver:loading and removing the driver in user spacenothing.c
+#include &amp;lt;linux/module.h&amp;gt;
+MODULE_LICENSE(&quot;Dual BSD/GPL&quot;);
+Makefile
+obj-m := nothing.o
+compile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux_driver_module">
+<meta property="og:url" content="http://wonfee.github.io/2015/06/23/linux-driver-module/index.html">
+<meta property="og:site_name" content="Wonfee's HomePage">
+<meta property="og:description" content="linux device driver tutorialThe first driver:loading and removing the driver in user spacenothing.c
+#include &amp;lt;linux/module.h&amp;gt;
+MODULE_LICENSE(&quot;Dual BSD/GPL&quot;);
+Makefile
+obj-m := nothing.o
+compile">
+<meta property="og:updated_time" content="2015-06-23T06:32:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux_driver_module">
+<meta name="twitter:description" content="linux device driver tutorialThe first driver:loading and removing the driver in user spacenothing.c
+#include &amp;lt;linux/module.h&amp;gt;
+MODULE_LICENSE(&quot;Dual BSD/GPL&quot;);
+Makefile
+obj-m := nothing.o
+compile">
+  
+    <link rel="alternative" href="/atom.xml" title="Wonfee&#39;s HomePage" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wonfee&#39;s HomePage</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">body and soul, there must be one on the road.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wonfee.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux-driver-module" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/23/linux-driver-module/" class="article-date">
+  <time datetime="2015-06-23T06:30:17.000Z" itemprop="datePublished">2015-06-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      linux_driver_module
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="linux_device_driver_tutorial">linux device driver tutorial</h1><h2 id="The_first_driver:">The first driver:</h2><p>loading and removing the driver in user space<br>nothing.c</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
+MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
+</code></pre><p>Makefile</p>
+<pre><code><span class="rule"><span class="attribute">obj-m </span>:<span class="value">= nothing.o</span></span>
+</code></pre><p>compile and test:</p>
+<p>$make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
+<p>或者</p>
+<p>make -C /lib/modules/`uname -r`/build M=`pwd` modules</p>
+<p>out: </p>
+<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-<span class="number">3.16</span>.0<span class="comment">'</span>
+  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.o
+  Building modules, stage <span class="number">2.</span>
+  MODPOST <span class="number">1</span> modules
+  CC      /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.<span class="keyword">mod</span>.o
+  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.ko
+
+  sudo insmod <span class="literal">nothing</span>.ko
+  lsmod |grep <span class="literal">nothing</span>
+  <span class="literal">nothing</span>                 <span class="number">8255</span>  <span class="number">0</span>
+  sudo rmmod <span class="literal">nothing</span>
+</code></pre><h2 id="The_“Hello_world”_driver:">The “Hello world” driver:</h2><p>loading and removing the driver in kernel space<br>hello.c</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/init.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span>
+
+MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
+
+<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    printk(KERN_DEBUG <span class="string">"Hello World !!!\n"</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    printk(KERN_DEBUG <span class="string">"Bye bye !!!\n"</span>);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+</code></pre><p>   make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
+<pre><code>make: Entering directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
+<span class="code">  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.o</span>
+<span class="code">  Building modules, stage 2.</span>
+<span class="code">  MODPOST 1 modules</span>
+<span class="label">WARNING: </span>"mcount" [/home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko] undefined!
+<span class="code">  CC      /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.mod.o</span>
+<span class="code">  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko</span>
+make: Leaving directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
+</code></pre><p> sudo insmod hello.ko </p>
+<pre><code>insmod: ERROR: could not <span class="operator"><span class="keyword">insert</span> <span class="keyword">module</span> hello.ko: <span class="keyword">Unknown</span> symbol <span class="keyword">in</span> <span class="keyword">module</span></span>
+</code></pre><p>dmesg |tail </p>
+<pre><code>...
+<span class="attr_selector">[21684.565795]</span> <span class="rule"><span class="attribute">hello</span>:<span class="value"> Unknown symbol mcount (err <span class="number">0</span>)</span></span>
+</code></pre><p>加载内核模块出错，网上说是gcc 版本问题，当前使用的gcc是软链接到gcc-4.4,这是之前为了编译android源码时将gcc从4.8降到了4.4,重新将gcc链接到4.8：<br>gcc -v</p>
+<pre><code><span class="tag">gcc</span> <span class="tag">version</span> 4<span class="class">.8</span><span class="class">.2</span> (<span class="tag">Ubuntu</span> 4<span class="class">.8</span><span class="class">.2-19ubuntu1</span>)
+</code></pre><p>make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel/ M=`pwd` modules</p>
+<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-3.16.0'
+  <span class="keyword">CC</span> [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  <span class="keyword">CC</span>      /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.mod.o
+  LD [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.ko
+make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
+</code></pre><p> sudo insmod hello.ko<br> dmesg |tail -n 1</p>
+<pre><code>[<span class="number">22644.697688</span>] <span class="variable">Hello</span> <span class="variable">World</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
+</code></pre><p>sudo rmmod hello<br>dmesg |tail -n 1</p>
+<pre><code>[<span class="number">22663.379104</span>] <span class="variable">Bye</span> <span class="function_or_atom">bye</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
+</code></pre><p>Makefile</p>
+<pre><code><span class="comment">//------------ General Makefile------------------</span>
+ obj-<span class="keyword">m</span> := hello.o
+ KERNELDIR := /lib/modules/$(<span class="keyword">shell</span> uname -r)/build
+ <span class="keyword">PWD</span> := $(<span class="keyword">shell</span> <span class="keyword">pwd</span>)
+ modules:
+     $(MAKE) -C $(KERNELDIR) <span class="keyword">M</span>=$(<span class="keyword">PWD</span>) modules
+</code></pre><p> modules_install:<br>     $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install</p>
+<p>编译模块，可以使用如下两种方式：</p>
+<pre><code><span class="label">$make</span> -C /usr/src/linux-xxx <span class="keyword">M</span>=`<span class="keyword">pwd</span>` modules
+</code></pre><p>$make -C /lib/modules/<code>uname -r</code>/build M=<code>pwd</code> modules</p>
+<p>两者效果相同， 只是使用的源码路径不一样，usr/src目录下那个源代码一般是我们自己下载后解压的或者系统更新时下载的，而lib目录下的则是在编译时自动copy过去的，两者其实是完全一样的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cib8yfttp0000lghjk3zl0ukn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/06/20/hexo-install/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hexo install</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<section id="comments">
+  <!-- Duoshuo Comment BEGIN -->
+  <div class="ds-thread"></div>
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"wonfee"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = 'http://static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+          || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+  </script>
+<!-- Duoshuo Comment END -->
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/20/hexo-install/">hexo install</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/20/Linux-0-11-compile/">Linux-0.11 compile</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/19/My-First-Post/">Markdown 常用语法</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/19/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget tag">
+<p class="asidetitle">联系方式</p>
+<ul class="entry">
+<li>QQ：845016952</li>
+<li>email：dasifly@gmail.com</li>
+</ul>
+</div>
+
+  
+    <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+    <ul class="entry">
+    <li><a href="http://blog.163.com/dasifly@126/manage/#m=0&t=0" title="网易博客">网易博客</a></li>
+    </ul>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Wonfee<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
