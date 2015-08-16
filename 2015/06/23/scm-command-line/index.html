@@ -17,7 +17,7 @@ svn co http://x">
 svn command line将文件从服务器更新到本地版本库：svn checkout path (path 为svn仓库路径)例如：
 svn checkout file:///F:/svn_test
 svn co http://x">
-<meta property="og:updated_time" content="2015-06-23T08:19:35.000Z">
+<meta property="og:updated_time" content="2015-08-16T02:35:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scm command line">
 <meta name="twitter:description" content="scm command line usage这里介绍下工作中经常使用的到的代码管理工具svn 和git的常用命令， 本人对svn使用的比较少，工作中主要使用git。
@@ -157,7 +157,8 @@ git <span class="operator"><span class="keyword">commit</span> -m “<span class
 </code></pre><p>服务器地址变更后，工作目录做如下操作</p>
 <pre><code>git remote set-url origin git@xxx<span class="class">.xxx</span><span class="class">.xxx</span><span class="class">.xxx</span>:/home/git/repositories/project<span class="class">.git</span>
 git remote show origin  #查看变更后的远程仓库信息
-</code></pre><p>分支工作流程</p>
+</code></pre><p>git仓库服务器迁移<br>        git clone —bare git@oldserver:project.git      # 从原服务器获取纯仓库<br>        cd project.git<br>        git push —mirror git@newserver:newproject.git  # 以镜像方式将仓库推送到新的服务器 </p>
+<p>分支工作流程</p>
 <pre><code>git pull<span class="comment">#获取服务器最新的代码</span>
 git checkout -b foobar<span class="comment">#创建并切换到一个本地分支</span>
 … hack hack hcak …创建并切换到一个本地分支<span class="comment">#在本地的该分支上做开发</span>
@@ -181,6 +182,10 @@ git <span class="keyword">reset</span> --hard  commit<span class="comment">#清�
 <pre><code>git <span class="keyword">log</span>    <span class="comment">#查看提交的commit</span>
 git <span class="keyword">reset</span> --hard commit<span class="comment">#回退到某个commit状态</span>
 git <span class="keyword">push</span> origin develop -foobar<span class="comment">#强制更新到远端服务器 </span>
+</code></pre><p>撤销已更新到远端的提交：(git revert <sha>，当执行过git push后，想安全撤销该次的push操作)<br>    git log    # 1.查看该次提交的sha1值<br>        commit 2996d7ff2b345c826b51da922b63e8efadb6b146<br>        Author: Wonfee <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x64;&#97;&#115;&#105;&#102;&#108;&#x79;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x64;&#97;&#115;&#105;&#102;&#108;&#x79;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a><br>        Date:   Thu Jul 2 08:16:52 2015 +0800<br>        remove useless file</sha></p>
+<pre><code><span class="label">git</span> <span class="keyword">revert </span><span class="number">2996</span>d7ff2b345c826b51da922b63e8efadb6b146 # <span class="number">2</span>.执行<span class="keyword">revert操作
+</span><span class="label">git</span> <span class="keyword">push </span>  # <span class="number">3</span>.更新到远端仓库
+这样就可以将上次的commit安全的撤销
 </code></pre><p>stash 使用<br>当你在某个分支进行的开发工作还没完成时，此时主分支发现有bug必须立即去修复，而此时又不想提交还没完成的分支开发，可以使用stash来储存你的开发。</p>
 <pre><code>… hack hack hack …
 git stash
@@ -213,7 +218,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cibely7om0003v8hj5ib1clli" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="ciddvu7uh0003chhjqz51gkbi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
