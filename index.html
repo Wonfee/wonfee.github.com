@@ -65,6 +65,124 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CyanogenMod-Source-Code-Download" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/22/CyanogenMod-Source-Code-Download/" class="article-date">
+  <time datetime="2015-08-22T01:02:33.000Z" itemprop="datePublished">2015-08-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="env_ubuntu_14-04_64">env ubuntu 14.04 64</h2><p>mkdir CyanogenMod &amp;&amp; cd CyanogenMod<br>下载repo<br>curl <a href="http://php.webtutor.pl/en/wp-content/uploads/2011/09/repo" target="_blank" rel="external">http://php.webtutor.pl/en/wp-content/uploads/2011/09/repo</a> &gt; ./repo<br>chmod 755 ./repo<br>初始化：<br>./repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0<br>同步源码：<br>./repo sync -j4</p>
+<ul>
+<li>[new tag]         android-wear-5.1.0_r1 -&gt; android-wear-5.1.0_r1</li>
+<li>[new tag]         android-wear-5.1.1_r1 -&gt; android-wear-5.1.1_r1<br>Fetching projects: 100% (477/477), done.<br>Checking out files: 100% (44267/44267), done. files:  22% (10167/44267)<br>Checking out files: 100% (6686/6686), done.out files:  24% (1636/6686)<br>Checking out files: 100% (9389/9389), done.out files:  32% (3007/9389)<br>Checking out files: 100% (50822/50822), done.t files:   3% (1619/50822)<br>Checking out files: 100% (10083/10083), done.<br>Checking out files: 100% (4307/4307), done.out files:   2% (110/4307)<br>Checking out files: 100% (4082/4082), done.out files:  24% (987/4082)<br>Checking out files: 100% (3494/3494), done.out files:  10% (376/3494)<br>Checking out files: 100% (7954/7954), done.<br>Checking out files: 100% (4098/4098), done. out files:  20% (826/4098)<br>Checking out files: 100% (11685/11685), done.ut files:  19% (2317/11685)<br>Checking out files: 100% (4093/4093), done. out files:  29% (1193/4093)<br>Checking out files: 100% (1654/1654), done. out files:  30% (510/1654)<br>Checking out files: 100% (23588/23588), done.ut files:   0% (149/23588)<br>Checking out files: 100% (4629/4629), done. out files:  34% (1592/4629)<br>Checking out files: 100% (8597/8597), done.<br>Checking out files: 100% (1765/1765), done. out files:   0% (12/1765)<br>Checking out files: 100% (575/575), done.ng out files:  21% (123/575)<br>Checking out files: 100% (431/431), done.ng out files:  10% (47/431)<br>Checking out files: 100% (181/181), done.ng out files:  48% (87/181)<br>Checking out files: 100% (2407/2407), done. out files:  33% (795/2407)<br>Checking out files: 100% (2482/2482), done.<br>Checking out files: 100% (177/177), done.ng out files:  10% (19/177)<br>Checking out files: 100% (182/182), done.<br>Checking out files: 100% (50299/50299), done.ut files:  16% (8475/50299)<br>Checking out files: 100% (4864/4864), done.<br>Checking out files: 100% (182/182), done.ng out files:   7% (14/182)<br>Checking out files: 100% (1256/1256), done.<br>Checking out files: 100% (53361/53361), done.ut files:   2% (1108/53361)<br>Checking out files: 100% (126/126), done.<br><strong>Syncing work tree: 100% (477/477), done.</strong> </li>
+</ul>
+<p>看到最后的 “Syncing work tree: 100% (477/477), done.” 代表代码同步完成。 由于同步代码会比较耗时，且网络不好断开时，没有同步完成的代码会以 tmp<em>pack_xxx 的形式保存在.repo/projects/仓库名/objects/pack/tmp_pack_XXX 目录下面，再次同步时会从头开始，若多次断开就会在该目录下存在多个tmp_pack_XXX的临时文件并占用大量空间，该文件会在代码同步完成后被删除，也可以手动删除 find ./ -name tmp_pack</em>* -exec rm -rf {} \;</p>
+<p>同步代码时为了防止断网导致同步中断可以用一个shell脚本来循环执行repo sync的操作直到成功：</p>
+<pre><code>./repo <span class="keyword">sync</span> -j16
+<span class="keyword">while</span> [ $? != <span class="number">0</span> ]
+<span class="keyword">do</span>
+    ### maybe disconnect, <span class="keyword">try</span> again
+    <span class="keyword">sleep</span> <span class="number">1</span>
+    ./repo <span class="keyword">sync</span> -j16
+done
+</code></pre><p>下面是代码同步完成后的目录结构：</p>
+<pre><code>.
+├── abi
+├── <span class="keyword">android
+</span>├── art
+├── <span class="keyword">bionic
+</span>├── <span class="keyword">bootable
+</span>├── <span class="keyword">build
+</span>├── cts
+├── dalvik
+├── developers
+├── development
+├── device
+├── docs
+├── external
+├── frameworks
+├── hardware
+├── kernel
+├── libcore
+├── libnativehelper
+├── Makefile
+├── ndk
+├── packages
+├── pdk
+├── prebuilt
+├── prebuilts
+├── repo
+├── sdk
+├── sync.sh
+├── system
+├── tools
+└── vendor
+</code></pre><p>来看下整个仓库的大小：</p>
+<pre><code><span class="number">45</span>M    ./developers
+<span class="number">118</span>M./development
+<span class="number">46</span>M    ./libcore
+<span class="number">12</span>M    ./system
+<span class="number">4.2</span>G./prebuilts
+<span class="number">1.2</span>G./frameworks
+<span class="number">11</span>M    ./build
+<span class="number">8.0</span><span class="keyword">K</span>./kernel
+<span class="number">33</span>M    ./sdk
+<span class="number">13</span>M    ./art
+<span class="number">88</span>M    ./hardware
+<span class="number">3.2</span>G./external
+<span class="number">12</span>M    ./device
+<span class="number">424</span>M./cts
+<span class="number">42</span>M    ./dalvik
+<span class="number">9.1</span>M./docs
+<span class="number">12</span>M    ./bootable
+<span class="number">19</span>M    ./bionic
+<span class="number">971</span>M./tools
+<span class="number">18</span>G    ./.repo
+<span class="number">120</span><span class="keyword">K</span>./abi
+<span class="number">72</span><span class="keyword">K</span>    ./android
+<span class="number">196</span><span class="keyword">K</span>./libnativehelper
+<span class="number">260</span>M./prebuilt
+<span class="number">89</span>M    ./vendor
+<span class="number">382</span>M./packages
+<span class="number">916</span><span class="keyword">K</span>./pdk
+<span class="number">77</span>M    ./ndk
+<span class="number">29</span>G.
+</code></pre><p>29G，.repo就占了18G，可见仓库的历史记录占用了很大的空间。代码同步完成就可以开始进行编译定制自己的rom了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cidmd5fkb00008zhjq0itj2qy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-Makefile-tutorial" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/22/Makefile-tutorial/" class="article-date">
@@ -137,7 +255,7 @@ clean:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidmc9ot7000m1uhjukejpcfd" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidmd5fkz000m8zhjcwdayhav" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
@@ -201,7 +319,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidmc9ot2000f1uhjrg9mkp8l" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidmd5fkv000f8zhjzp2tntn2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -369,7 +487,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidmc9osi00001uhjc6cx9qtc" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidmd5fl3000t8zhj1v6djo5w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -538,7 +656,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidmc9oso00031uhj5u0149gl" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidmd5fkg00038zhjv4dr3ery" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -660,7 +778,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidmc9osu00061uhjcbz1pfip" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidmd5fki00068zhj505jxx7v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -746,7 +864,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidmc9osv00091uhjjsc9cysw" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidmd5fkk00098zhjkrmqx2ao" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -858,7 +976,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidmc9ot9000p1uhjgxzxtdnb" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidmd5fl1000p8zhj6wiw2w3f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -970,7 +1088,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidmc9ot4000i1uhjurs8ppof" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidmd5fkx000i8zhjxxcd0xxu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -1020,7 +1138,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cidmc9ot1000e1uhj1lpqs6l2" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cidmd5fkt000e8zhjfvqmbizz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1051,7 +1169,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1060,7 +1178,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
     </div>
   </div>
 
@@ -1069,7 +1187,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1079,6 +1197,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
+          </li>
         
           <li>
             <a href="/2015/08/22/Makefile-tutorial/">Makefile tutorial</a>
@@ -1094,10 +1216,6 @@ Author:
         
           <li>
             <a href="/2015/06/23/scm-command-line/">scm command line</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
           </li>
         
       </ul>
