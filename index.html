@@ -65,6 +65,93 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Makefile-tutorial" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/22/Makefile-tutorial/" class="article-date">
+  <time datetime="2015-08-22T00:33:45.000Z" itemprop="datePublished">2015-08-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/22/Makefile-tutorial/">Makefile tutorial</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。</p>
+<h2 id="（一）单目录多文件Makefile编写">（一）单目录多文件Makefile编写</h2><p>目录机构如下：</p>
+<p>├── Libusb.c<br>├── Libusb.h<br>├── main.c<br>├── makefile<br>├── Makefile<br>├── mybluetooth.c<br>├── mybluetooth.h<br>├── obex.c<br>├── ObexDef.h<br>├── obex.h<br>├── ObexPack.c<br>└── ObexPack.h</p>
+<p>一、 执行gcc分别编译</p>
+<pre><code>CFLAGS:= -g #-fshort-wchar
+
+all : main
+main : main<span class="class">.o</span> mybluetooth<span class="class">.o</span> Libusb<span class="class">.o</span> obex<span class="class">.o</span> ObexPack<span class="class">.o</span>
+    gcc $(CFLAGS) -o main main<span class="class">.o</span> mybluetooth<span class="class">.o</span> Libusb<span class="class">.o</span> obex<span class="class">.o</span> ObexPack<span class="class">.o</span> -lbluetooth `pkg-config --cflags --libs libusb-<span class="number">1.0</span>` -lusb
+
+main<span class="class">.o</span> : main<span class="class">.c</span>
+    gcc $(CFLAGS) -c main<span class="class">.c</span>
+
+Libusb<span class="class">.o</span>: Libusb<span class="class">.c</span>
+    gcc $(CFLAGS) -c Libusb<span class="class">.c</span> `pkg-config --libs --cflags libusb-<span class="number">1.0</span>` -lusb
+
+mybluetooth<span class="class">.o</span> : mybluetooth<span class="class">.c</span>
+    gcc $(CFLAGS) -c mybluetooth<span class="class">.c</span> -lbluetooth
+
+obex<span class="class">.o</span>: obex<span class="class">.c</span>
+    gcc $(CFLAGS) -c obex<span class="class">.c</span> 
+
+ObexPack<span class="class">.o</span>: ObexPack<span class="class">.c</span>
+    gcc $(CFLAGS) -c ObexPack<span class="class">.c</span>
+
+clean:
+    rm -rf *<span class="class">.o</span> main .*.swp
+</code></pre><p>二、使用makefile的自动推导功能</p>
+<pre><code>CC = gcc
+CFLAGS = -g -Wall -I/usr/include/libusb-<span class="number">1.0</span>  -lusb-<span class="number">1.0</span> -lusb -lbluetooth
+
+OBJS= Libusb<span class="class">.o</span>  main<span class="class">.o</span>  mybluetooth<span class="class">.o</span>  obex<span class="class">.o</span>  ObexPack<span class="class">.o</span>
+
+main: $(OBJS)
+    $(CC) -o main $(OBJS) $(CFLAGS)
+
+#以下可以不用写
+<span class="id">#main</span><span class="class">.o</span>: ObexDef<span class="class">.h</span>
+<span class="id">#obex</span><span class="class">.o</span>: obex<span class="class">.h</span>
+<span class="id">#ObexPack</span><span class="class">.o</span>: ObexPack<span class="class">.h</span> ObexDef<span class="class">.h</span>
+<span class="id">#Libusb</span><span class="class">.o</span>: Libusb<span class="class">.h</span>
+<span class="id">#mybluetooth</span><span class="class">.o</span>: mybluetooth<span class="class">.h</span>
+
+<span class="class">.PHONY</span>: clean
+clean:
+    rm $(OBJS) main
+</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidmc9ot7000m1uhjukejpcfd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-cmds-daily-use" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/16/cmds-daily-use/" class="article-date">
@@ -114,7 +201,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="ciddwba2x000flthj9oyvrn83" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidmc9ot2000f1uhjrg9mkp8l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -282,7 +369,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="ciddwba220000lthj6eurnw4o" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidmc9osi00001uhjc6cx9qtc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -451,7 +538,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="ciddwba2r0003lthjueoftnt9" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidmc9oso00031uhj5u0149gl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -573,7 +660,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="ciddwba2s0006lthjwmzxasga" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidmc9osu00061uhjcbz1pfip" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -659,7 +746,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="ciddwba2u0009lthjljo1vj2c" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidmc9osv00091uhjjsc9cysw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -771,7 +858,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="ciddwba31000mlthj3srg5v3r" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidmc9ot9000p1uhjgxzxtdnb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -883,7 +970,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="ciddwba2y000ilthjsw743a4b" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidmc9ot4000i1uhjurs8ppof" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -933,7 +1020,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="ciddwba2v000elthjra1pm2uf" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cidmc9ot1000e1uhj1lpqs6l2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -964,7 +1051,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -973,7 +1060,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
+      <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
     </div>
   </div>
 
@@ -982,7 +1069,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -992,6 +1079,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/08/22/Makefile-tutorial/">Makefile tutorial</a>
+          </li>
         
           <li>
             <a href="/2015/08/16/cmds-daily-use/">cmds_daily_use</a>
@@ -1007,10 +1098,6 @@ Author:
         
           <li>
             <a href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/20/hexo-install/">hexo install</a>
           </li>
         
       </ul>
