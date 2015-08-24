@@ -65,6 +65,88 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-build-cm-11-source-code" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/24/build-cm-11-source-code/" class="article-date">
+  <time datetime="2015-08-24T05:13:31.000Z" itemprop="datePublished">2015-08-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="编译环境准备">编译环境准备</h2><h3 id="编译环境">编译环境</h3><p>uname -a<br>Linux wonfee-ThinkPad-T540p 3.16.7-ckt5my-very-own-kernel #1 SMP Fri Feb 27 23:04:29 CST 2015 x86_64 x86_64 x86_64 GNU/Linux</p>
+<p>cat /etc/issue<br>Ubuntu 14.04.2 LTS \n \l</p>
+<p>java -version<br>java version “1.6.0_30”<br>Java(TM) SE Runtime Environment (build 1.6.0_30-b12)<br>Java HotSpot(TM) 64-Bit Server VM (build 20.5-b03, mixed mode)</p>
+<h3 id="安装其他必要的库">安装其他必要的库</h3><p>该部分可参考android源码官方编译文档，若已成功编译过android源码，则该部分的库应该都已经安装。<br>sudo apt-get install bison build-essential curl flex \<br>g++-multilib gcc-multilib git-core gnupg gperf \<br>lib32ncurses5-dev lib32readline-gplv2-dev lib32z1-dev \<br>libesd0-dev libncurses5-dev libsdl1.2-dev \<br>libwxgtk2.8-dev libxml2 libxml2-utils lzop \<br>openjdk-6-jdk openjdk-6-jre pngcrush schedtool \<br>squashfs-tools xsltproc zip zlib1g-dev</p>
+<h2 id="下载cm源码">下载cm源码</h2><p>参考： <a href="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a></p>
+<p>下载好cm-11源码后，如果要编译此时还需要下载其所支持机型相关的device、kernel等代码, 这里以官方所支持的nexus7机型作为测试。</p>
+<p>从cm官方的github页面[cm-github][2]搜索grouper可以看到还需要下载device和kernel部分，分别为android_device_asus_grouper、android_kernel_asus_grouper，<br>mkdir -p device/asus/ &amp;&amp; cd device/asus<br>git clone <a href="https://github.com/CyanogenMod/android_kernel_asus_grouper.git" target="_blank" rel="external">https://github.com/CyanogenMod/android_kernel_asus_grouper.git</a> grouper<br>cd ../../<br>mkdir -p kernel/asus &amp;&amp; cd kernel/asus/<br>git clone <a href="https://github.com/CyanogenMod/android_device_asus_grouper.git" target="_blank" rel="external">https://github.com/CyanogenMod/android_device_asus_grouper.git</a> grouper</p>
+<h2 id="编译CM-11_源码">编译CM-11 源码</h2><p>source build/envsetup.sh </p>
+<pre><code>including device/generic/armv7-a-neon/vendorsetup<span class="class">.sh</span>
+including device/generic/goldfish/vendorsetup<span class="class">.sh</span>
+including device/generic/mips/vendorsetup<span class="class">.sh</span>
+including device/generic/x86/vendorsetup<span class="class">.sh</span>
+including vendor/cm/vendorsetup<span class="class">.sh</span>
+including sdk/bash_completion/adb<span class="class">.bash</span>
+including vendor/cm/bash_completion/git<span class="class">.bash</span>
+including vendor/cm/bash_completion/repo.bash
+</code></pre><p>breakfast grouper</p>
+<p>Download the necessary prebuilts from cyanogenmod by running</p>
+<pre><code><span class="keyword">cd</span> verdor/<span class="keyword">cm</span>/
+</code></pre><p> . get-prebuilts </p>
+<pre><code>  % <span class="constant">Total </span>   % <span class="constant">Received </span>% <span class="constant">Xferd </span> <span class="constant">Average Speed </span>  <span class="constant">Time </span>   <span class="constant">Time </span>    <span class="constant">Time </span> <span class="constant">Current</span>
+                                 <span class="constant">Dload </span> <span class="constant">Upload </span>  <span class="constant">Total </span>  <span class="constant">Spent </span>   <span class="constant">Left </span> <span class="constant">Speed</span>
+<span class="number">100</span>   <span class="number">178</span>  <span class="number">100</span>   <span class="number">178</span>    <span class="number">0</span>     <span class="number">0</span>    <span class="number">229</span>      <span class="number">0</span> --<span class="symbol">:--</span><span class="symbol">:--</span> --<span class="symbol">:--</span><span class="symbol">:--</span> --<span class="symbol">:--</span><span class="symbol">:--</span>   <span class="number">229</span>
+<span class="number">100</span>  <span class="number">551</span>k  <span class="number">100</span>  <span class="number">551</span>k    <span class="number">0</span>     <span class="number">0</span>   <span class="number">265</span>k      <span class="number">0</span>  <span class="number">0</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:</span><span class="number">02</span>  <span class="number">0</span><span class="symbol">:</span><span class="number">00</span><span class="symbol">:</span><span class="number">02</span> --<span class="symbol">:--</span><span class="symbol">:--</span> <span class="number">1531</span>k
+<span class="constant">Archive:</span>  ./proprietary/<span class="constant">Term.</span>apk
+  <span class="symbol">inflating:</span> ./proprietary/lib/armeabi/libjackpal-androidterm5.so  
+  <span class="symbol">inflating:</span> ./proprietary/lib/mips/libjackpal-androidterm5.so  
+  <span class="symbol">inflating:</span> ./proprietary/lib/x86/libjackpal-androidterm5.so  
+  <span class="symbol">inflating:</span> ./proprietary/lib/armeabi/libjackpal-termexec2.so  
+  <span class="symbol">inflating:</span> ./proprietary/lib/mips/libjackpal-termexec2.so  
+  <span class="symbol">inflating:</span> ./proprietary/lib/x86/libjackpal-termexec2.so
+</code></pre><p>croot</p>
+<p>Building the ROM</p>
+<p>brunch grouper  </p>
+<pre><code><span class="string">running:</span>  java -Xmx2048m -jar <span class="regexp">/data/</span>Android<span class="regexp">/Cyanogenmod/</span>out<span class="regexp">/host/</span>linux-x86<span class="regexp">/framework/</span>signapk.jar -w build<span class="regexp">/target/</span>product<span class="regexp">/security/</span>testkey.x509.pem build<span class="regexp">/target/</span>product<span class="regexp">/security/</span>testkey.pk8 <span class="regexp">/tmp/</span>tmpFcHrQD <span class="regexp">/data/</span>Android<span class="regexp">/Cyanogenmod/</span>out<span class="regexp">/target/</span>product<span class="regexp">/grouper/</span>cm_grouper-ota-<span class="number">387</span>c0dd2e4.zip
+done.
+Package <span class="string">Complete:</span> <span class="regexp">/data/</span>Android<span class="regexp">/Cyanogenmod/</span>out<span class="regexp">/target/</span>product<span class="regexp">/grouper/</span>cm-<span class="number">11</span>-<span class="number">20150824</span>-UNOFFICIAL-grouper.zip
+</code></pre><p>注意事项：</p>
+<ol>
+<li>若编译环境有配置NDK_ROOT环境变量，则编译前需要取消该环境变量unset NDK_ROOT, 否则编译会直接报错;</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cidpgzk61000is5hj4wke776w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-CyanogenMod-Source-Code-Download" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/22/CyanogenMod-Source-Code-Download/" class="article-date">
@@ -168,7 +250,7 @@ done
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cidmd5fkb00008zhjq0itj2qy" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cidpgzk5e0000s5hjjbm4ibs1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a></li></ul>
@@ -255,7 +337,7 @@ clean:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidmd5fkz000m8zhjcwdayhav" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidpgzk64000ps5hjd2daa297" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
@@ -319,7 +401,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidmd5fkv000f8zhjzp2tntn2" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidpgzk5z000fs5hj7ifq6eaf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -487,7 +569,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidmd5fl3000t8zhj1v6djo5w" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidpgzk69000ws5hjvvj90po4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -656,7 +738,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidmd5fkg00038zhjv4dr3ery" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidpgzk5k0003s5hj4823i5g6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -778,7 +860,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidmd5fki00068zhj505jxx7v" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidpgzk5m0006s5hjjgfvfji2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -864,7 +946,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidmd5fkk00098zhjkrmqx2ao" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidpgzk5r0009s5hjaopx3cxs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -976,7 +1058,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidmd5fl1000p8zhj6wiw2w3f" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidpgzk67000ss5hjdv42sec4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -1088,7 +1170,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidmd5fkx000i8zhjxxcd0xxu" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidpgzk62000ls5hjzp87zolp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -1103,54 +1185,10 @@ Author:
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/19/hello-world/" class="article-date">
-  <time datetime="2015-06-19T07:30:30.000Z" itemprop="datePublished">2015-06-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/19/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cidmd5fkt000e8zhjfvqmbizz" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </section>
         
@@ -1169,7 +1207,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1178,7 +1216,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a>
     </div>
   </div>
 
@@ -1187,7 +1225,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1197,6 +1235,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
+          </li>
         
           <li>
             <a href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
@@ -1212,10 +1254,6 @@ Author:
         
           <li>
             <a href="/2015/06/27/Gitolite-README/">Gitolite README</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/23/scm-command-line/">scm command line</a>
           </li>
         
       </ul>
