@@ -15,7 +15,7 @@ java -versionjava">
 <meta property="og:description" content="编译环境准备编译环境uname -aLinux wonfee-ThinkPad-T540p 3.16.7-ckt5my-very-own-kernel #1 SMP Fri Feb 27 23:04:29 CST 2015 x86_64 x86_64 x86_64 GNU/Linux
 cat /etc/issueUbuntu 14.04.2 LTS \n \l
 java -versionjava">
-<meta property="og:updated_time" content="2015-08-24T05:15:02.000Z">
+<meta property="og:updated_time" content="2015-08-28T14:58:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="build cm-11 source code">
 <meta name="twitter:description" content="编译环境准备编译环境uname -aLinux wonfee-ThinkPad-T540p 3.16.7-ckt5my-very-own-kernel #1 SMP Fri Feb 27 23:04:29 CST 2015 x86_64 x86_64 x86_64 GNU/Linux
@@ -131,13 +131,13 @@ done.
 Package <span class="string">Complete:</span> <span class="regexp">/data/</span>Android<span class="regexp">/Cyanogenmod/</span>out<span class="regexp">/target/</span>product<span class="regexp">/grouper/</span>cm-<span class="number">11</span>-<span class="number">20150824</span>-UNOFFICIAL-grouper.zip
 </code></pre><p>注意事项：</p>
 <ol>
-<li>若编译环境有配置NDK_ROOT环境变量，则编译前需要取消该环境变量unset NDK_ROOT, 否则编译会直接报错;</li>
+<li>若编译环境有配置NDK_ROOT环境变量，则编译前需要取消该环境变量unset NDK_ROOT, 否则编译会直接如下报错;<br>build/core/base_rules.mk:134: <em>*</em> external/webrtc/src/system_wrappers/source: MODULE.TARGET.STATIC_LIBRARIES.libwebrtc_system_wrappers already defined by external/webrtc/src/system_wrappers/source.  Stop.<br>build error!</li>
 </ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cidpgzk61000is5hj4wke776w" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cidvrm4s5000ir4hjmtb0jl84" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a></li></ul>
