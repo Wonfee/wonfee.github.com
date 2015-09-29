@@ -3,24 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Makefile tutorial | Wonfee&#39;s HomePage</title>
+  <title>Archives: 2015/9 | Wonfee&#39;s HomePage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。
-（一）单目录多文件Makefile编写目录机构如下：
-├── Libusb.c├── Libusb.h├── main.c├── makefile├── Makefile├── mybluet">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Makefile tutorial">
-<meta property="og:url" content="http://wonfee.github.io/2015/08/22/Makefile-tutorial/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wonfee's HomePage">
+<meta property="og:url" content="http://wonfee.github.io/archives/2015/09/index.html">
 <meta property="og:site_name" content="Wonfee's HomePage">
-<meta property="og:description" content="工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。
-（一）单目录多文件Makefile编写目录机构如下：
-├── Libusb.c├── Libusb.h├── main.c├── makefile├── Makefile├── mybluet">
-<meta property="og:updated_time" content="2015-08-22T00:39:29.000Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Makefile tutorial">
-<meta name="twitter:description" content="工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。
-（一）单目录多文件Makefile编写目录机构如下：
-├── Libusb.c├── Libusb.h├── main.c├── makefile├── Makefile├── mybluet">
+<meta name="twitter:title" content="Wonfee's HomePage">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="Wonfee&#39;s HomePage" type="application/atom+xml">
   
@@ -70,129 +63,39 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Makefile-tutorial" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/22/Makefile-tutorial/" class="article-date">
-  <time datetime="2015-08-22T00:33:45.000Z" itemprop="datePublished">2015-08-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Makefile tutorial
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2015/09/29/porting-cyanogenmod/" class="archive-article-date">
+  <time datetime="2015-09-29T01:12:49.000Z" itemprop="datePublished">9月 29</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2015/09/29/porting-cyanogenmod/">porting cyanogenmod</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。</p>
-<h2 id="（一）单目录多文件Makefile编写">（一）单目录多文件Makefile编写</h2><p>目录机构如下：</p>
-<p>├── Libusb.c<br>├── Libusb.h<br>├── main.c<br>├── makefile<br>├── Makefile<br>├── mybluetooth.c<br>├── mybluetooth.h<br>├── obex.c<br>├── ObexDef.h<br>├── obex.h<br>├── ObexPack.c<br>└── ObexPack.h</p>
-<p>一、 执行gcc分别编译</p>
-<pre><code>CFLAGS:= -g #-fshort-wchar
-
-all : main
-main : main<span class="class">.o</span> mybluetooth<span class="class">.o</span> Libusb<span class="class">.o</span> obex<span class="class">.o</span> ObexPack<span class="class">.o</span>
-    gcc $(CFLAGS) -o main main<span class="class">.o</span> mybluetooth<span class="class">.o</span> Libusb<span class="class">.o</span> obex<span class="class">.o</span> ObexPack<span class="class">.o</span> -lbluetooth `pkg-config --cflags --libs libusb-<span class="number">1.0</span>` -lusb
-
-main<span class="class">.o</span> : main<span class="class">.c</span>
-    gcc $(CFLAGS) -c main<span class="class">.c</span>
-
-Libusb<span class="class">.o</span>: Libusb<span class="class">.c</span>
-    gcc $(CFLAGS) -c Libusb<span class="class">.c</span> `pkg-config --libs --cflags libusb-<span class="number">1.0</span>` -lusb
-
-mybluetooth<span class="class">.o</span> : mybluetooth<span class="class">.c</span>
-    gcc $(CFLAGS) -c mybluetooth<span class="class">.c</span> -lbluetooth
-
-obex<span class="class">.o</span>: obex<span class="class">.c</span>
-    gcc $(CFLAGS) -c obex<span class="class">.c</span> 
-
-ObexPack<span class="class">.o</span>: ObexPack<span class="class">.c</span>
-    gcc $(CFLAGS) -c ObexPack<span class="class">.c</span>
-
-clean:
-    rm -rf *<span class="class">.o</span> main .*.swp
-</code></pre><p>二、使用makefile的自动推导功能</p>
-<pre><code>CC = gcc
-CFLAGS = -g -Wall -I/usr/include/libusb-<span class="number">1.0</span>  -lusb-<span class="number">1.0</span> -lusb -lbluetooth
-
-OBJS= Libusb<span class="class">.o</span>  main<span class="class">.o</span>  mybluetooth<span class="class">.o</span>  obex<span class="class">.o</span>  ObexPack<span class="class">.o</span>
-
-main: $(OBJS)
-    $(CC) -o main $(OBJS) $(CFLAGS)
-
-#以下可以不用写
-<span class="id">#main</span><span class="class">.o</span>: ObexDef<span class="class">.h</span>
-<span class="id">#obex</span><span class="class">.o</span>: obex<span class="class">.h</span>
-<span class="id">#ObexPack</span><span class="class">.o</span>: ObexPack<span class="class">.h</span> ObexDef<span class="class">.h</span>
-<span class="id">#Libusb</span><span class="class">.o</span>: Libusb<span class="class">.h</span>
-<span class="id">#mybluetooth</span><span class="class">.o</span>: mybluetooth<span class="class">.h</span>
-
-<span class="class">.PHONY</span>: clean
-clean:
-    rm $(OBJS) main
-</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4o7nkf000qqyhjf0ohxc4y" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2015/08/22/CyanogenMod-Source-Code-Download/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          CyanogenMod Source Code Download
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/08/16/cmds-daily-use/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">cmds_daily_use</div>
-    </a>
-  
-</nav>
-
-  
 </article>
-
-
-
-
-<section id="comments">
-  <!-- Duoshuo Comment BEGIN -->
-  <div class="ds-thread"></div>
-    <script type="text/javascript">
-      var duoshuoQuery = {short_name:"wonfee"};
-        (function() {
-          var ds = document.createElement('script');
-          ds.type = 'text/javascript';ds.async = true;
-          ds.src = 'http://static.duoshuo.com/embed.js';
-          ds.charset = 'UTF-8';
-          (document.getElementsByTagName('head')[0]
-          || document.getElementsByTagName('body')[0]).appendChild(ds);
-        })();
-  </script>
-<!-- Duoshuo Comment END -->
-</section>
-
+  
+  
+    </div></section>
+  
 </section>
         
           <aside id="sidebar">

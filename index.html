@@ -65,6 +65,96 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-porting-cyanogenmod" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/29/porting-cyanogenmod/" class="article-date">
+  <time datetime="2015-09-29T01:12:49.000Z" itemprop="datePublished">2015-09-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/29/porting-cyanogenmod/">porting cyanogenmod</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于Cyanogenmod的源码编译已经没有问题，手头手机又都不在Cyanogenmod的支持列表里，所以打算将cyanogenmod亲自移植到我自己的手机上。<br>参考：<a href="https://wiki.cyanogenmod.org/w/Doc:_porting_intro" target="_blank" rel="external">How To Port CyanogenMod Android To Your Own Device</a></p>
+<h3 id="必备知识">必备知识</h3><p>成功移植过cyanogenmod到已知已支持的设备上;<br>对cyanogenmod的代码目录结构要熟悉;<br>移植一般会涉及到如下三个目录：<br>    /device/[vendor]/[codename]<br>    /vendor/[vendor]/[codename]<br>    /kernel/[vendor]/[codename]</p>
+<h3 id="搜集我们手机的相关信息">搜集我们手机的相关信息</h3><p>搜集手机的必要信息，如：product name, code name, architecture, memory size, internal storage size, and platform architecture.可以从手机中读取（手机最好已经root），或者在网上下载.zip升级包，从.zip包里解出获取相关信息;</p>
+<pre><code>mkdir <span class="keyword">le</span><span class="label">novo_s2</span> &amp;&amp; cd <span class="keyword">le</span><span class="label">novo_s2</span>
+adb pull /system/build.prop
+</code></pre><p> vendor name:<br> adb shell getprop ro.product.manufacturer 或者从build.prop中读取<br> codename：<br> adb shell getprop ro.product.device 或者从build.prop中读取</p>
+<h3 id="解包boot-img_或者_recovery-img得到内核文件kernel，在得不到内核源码的情况下，可以通过这种方式得到编译好的内核文件;">解包boot.img 或者 recovery.img得到内核文件kernel，在得不到内核源码的情况下，可以通过这种方式得到编译好的内核文件;</h3><p>boot.img,recovery.img可以在root过的手机上找到其对应分区，然后取出来;或者从.zip中得到;</p>
+<h3 id="在device、vendor、kernel下创建手机相关的目录">在device、vendor、kernel下创建手机相关的目录</h3><ol>
+<li>通过mkvendor.sh脚本自动创建</li>
+<li>从github仓库里找是否有手机型号比较接近的然后克隆下来</li>
+<li>手动创建这三个目录结构</li>
+</ol>
+<p>我们使用1.的方式，此种方式比较快速，先得到boot.img或者recovery.img</p>
+<pre><code>./build/tools/device/mkvendor.sh <span class="comment">[vendorname]</span> <span class="comment">[codename]</span> <span class="comment">[boot.img|recovery.img]</span>
+</code></pre><p>If it returns the message “unpackbootimg not found. Is your android build environment set up and have the host tools been built?” please be sure that you run the following command during setting up the developer environment:</p>
+<pre><code><span class="variable">$ </span>make -j4 otatools
+</code></pre><p>$ export PATH=$PATH:[source path]/out/host/linux-x86/bin</p>
+<pre><code>$ ./build/tools/device/mkvendor<span class="class">.sh</span> lenovo s2 ../lenove_s2/mmcblk0p8_boot<span class="class">.img</span> 
+Arguments: lenovo s2 ../lenove_s2/mmcblk0p8_boot<span class="class">.img</span>
+Output will be <span class="keyword">in</span> /data/Android/Cyanogenmod/device/lenovo/s2
+<span class="number">737</span> blocks
+Creating <span class="attribute">initial</span> git repository.
+/data/Android/Cyanogenmod/device/lenovo/s2 /data/Android/Cyanogenmod
+Initialized empty Git repository <span class="keyword">in</span> /data/Android/Cyanogenmod/device/lenovo/s2/.git/
+[master (root-commit) <span class="number">89</span>d920e] mkvendor<span class="class">.sh</span>: Initial commit of s2
+ <span class="number">8</span> files changed, <span class="number">96</span> <span class="function"><span class="title">insertions</span><span class="params">(+)</span></span>
+ create mode <span class="number">100644</span> AndroidBoard<span class="class">.mk</span>
+ create mode <span class="number">100644</span> AndroidProducts<span class="class">.mk</span>
+ create mode <span class="number">100644</span> BoardConfig<span class="class">.mk</span>
+ create mode <span class="number">100644</span> cm<span class="class">.mk</span>
+ create mode <span class="number">100644</span> device_s2<span class="class">.mk</span>
+ create mode <span class="number">100644</span> kernel
+ create mode <span class="number">100644</span> recovery<span class="class">.fstab</span>
+ create mode <span class="number">100644</span> system<span class="class">.prop</span>
+/data/Android/Cyanogenmod
+Done!
+Use the following command to set up your build environment:
+  lunch cm_s2-eng
+And use the follwowing command to build <span class="tag">a</span> recovery:
+  . build/tools/device/makerecoveries<span class="class">.sh</span> cm_s2-eng
+</code></pre><p>此时在device/[vendorname]/[codename]/目录下会生成 AndroidBoard.mk, AndroidProducts.mk, BoardConfig.mk, cm.mk, device_[codename].mk, kernel , recovery.fstab等文件</p>
+<pre><code>ls device/lenovo/s2/
+AndroidBoard<span class="class">.mk</span>  AndroidProducts<span class="class">.mk</span>  BoardConfig<span class="class">.mk</span>  cm<span class="class">.mk</span>  device_s2<span class="class">.mk</span>  kernel  recovery<span class="class">.fstab</span>  system.prop
+</code></pre><h3 id="客制化生成的文件">客制化生成的文件</h3><p>为了能使用生成的recovery.img正常工作，我们需要到device/[vendorname]/[codename]/下对生生的文件根据手机做相应的修改;</p>
+<p>Setup build environment:</p>
+<pre><code><span class="tag">lunch</span> <span class="tag">cm_</span><span class="attr_selector">[codename]</span><span class="tag">-eng</span>
+<span class="tag">lunch</span> <span class="tag">cm_s2-eng</span>
+</code></pre><p>build recovery image:</p>
+<pre><code>. build/tools/device/makerecoveries<span class="class">.sh</span> cm_[codename]-eng
+. build/tools/device/makerecoveries<span class="class">.sh</span> cm_s2-eng
+</code></pre><p>这样就完成了recovery.img的编译，但是发现用了两部手机通过此步骤做出的recovery.img刷进去后手机无法启动该recovery。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/09/29/porting-cyanogenmod/" data-id="cif4o7nk40006qyhjikyw8hau" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-build-cm-11-source-code" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/24/build-cm-11-source-code/" class="article-date">
@@ -132,7 +222,7 @@ Package <span class="string">Complete:</span> <span class="regexp">/data/</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cidvrm4s5000ir4hjmtb0jl84" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cif4o7nkb000jqyhje6x3ha53" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a></li></ul>
@@ -250,7 +340,7 @@ done
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cidvrm4rg0000r4hjusn831pe" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cif4o7njy0000qyhjabuc7xbp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a></li></ul>
@@ -337,7 +427,7 @@ clean:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cidvrm4s8000pr4hj5ka4x02l" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4o7nkf000qqyhjf0ohxc4y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
@@ -401,7 +491,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cidvrm4ry000fr4hjzm2zq048" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cif4o7nka000gqyhjgu0z93xu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -569,7 +659,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cidvrm4sd000wr4hjcu4stpl8" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cif4o7nkj000xqyhjzrh2o0sq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -738,7 +828,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cidvrm4ro0003r4hj8ccw07mm" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cif4o7nk20003qyhj8reg90cu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -860,7 +950,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cidvrm4rq0006r4hjesn8oleu" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cif4o7nk50007qyhjk1qwr5jk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -946,7 +1036,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cidvrm4rs0009r4hjc6e7crhi" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cif4o7nk7000aqyhjrpachwzt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -1058,122 +1148,10 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cidvrm4sb000sr4hjqose3ylf" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cif4o7nkh000tqyhjppral8mf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-  
-    <article id="post-My-First-Post" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/19/My-First-Post/" class="article-date">
-  <time datetime="2015-06-19T08:10:59.000Z" itemprop="datePublished">2015-06-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/19/My-First-Post/">Markdown 常用语法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Markdown_语法讲解">Markdown 语法讲解</h1><p>标题使用 ：<br>只需要在文本前面加上#即可，同理、你还可以增加二级标题、三级标题、四级标题、五级标题和六级标题，总共六级，如下所示：</p>
-<h1 id="一级标题">一级标题</h1><h2 id="二级标题">二级标题</h2><h3 id="三级标题">三级标题</h3><h4 id="四级标题">四级标题</h4><h4 id="五级标题">五级标题</h4><h5 id="六级标题">六级标题</h5><p>备注： “#” 和 [标题] 之间留有一个空格，次为markdown标准语法</p>
-<p>列表使用：<br>在 Markdown 中，你只需要在文字前面加上 - 就可以了，例如：</p>
-<ul>
-<li>文本1</li>
-<li>文本2</li>
-<li>文本3</li>
-</ul>
-<p>链接和图片使用：<br>链接：<br><a href="http://jianshu.io" target="_blank" rel="external">简书</a><br><a href="https://www.zybuluo.com/cmd/" target="_blank" rel="external">Cmd Markdown</a><br>图片：<br><img src="http://ww4.sinaimg.cn/bmiddle/aa397b7fjw1dzplsgpdw5j.jpg" alt=""></p>
-<p>备注：插入图片的语法和链接的语法很像，只是前面多了一个 ！</p>
-<p>引用：<br>在 Markdown 中，只需要在希望引用的文字前面加上 &gt;就可以引用他人的文字， 如：</p>
-<blockquote>
-<p>一盏灯， 一片昏黄； 一简书， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。</p>
-</blockquote>
-<p>诗歌引用：</p>
-<blockquote>
-<p>大漠孤烟直<br>长河落日圆</p>
-</blockquote>
-<p>粗体和斜体：<br>Markdown 的粗体和斜体也非常简单，用两个 * 包含一段文本就是粗体的语法，用一个 * 包含一段文本就是斜体的语法。例如：<br><strong>大漠孤烟直</strong><br><em>长河落日圆</em></p>
-<p>表格使用：</p>
-<table>
-<thead>
-<tr>
-<th>Tables</th>
-<th style="text-align:center">Are</th>
-<th style="text-align:right">Cool</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>col 3 is</td>
-<td style="text-align:center">right-aligned</td>
-<td style="text-align:right">$1600</td>
-</tr>
-<tr>
-<td>col 2 is</td>
-<td style="text-align:center">centered</td>
-<td style="text-align:right">$12</td>
-</tr>
-<tr>
-<td>zebra stripes</td>
-<td style="text-align:center">are neat</td>
-<td style="text-align:right">$1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>dog</th>
-<th>bird</th>
-<th>cat</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>foo</td>
-<td>foo</td>
-<td>foo</td>
-</tr>
-<tr>
-<td>2</td>
-<td>bar</td>
-<td>bar</td>
-<td>bar</td>
-</tr>
-</tbody>
-</table>
-<p>以上几种格式是比较常用的格式，Markdown 还有其他语法，如想了解和学习更多，可以参考这篇<a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">『Markdown 语法说明』</a>。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cidvrm4s7000lr4hjmsmu1tiq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
 
     </footer>
   </div>
@@ -1225,7 +1203,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1235,6 +1213,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/09/29/porting-cyanogenmod/">porting cyanogenmod</a>
+          </li>
         
           <li>
             <a href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
@@ -1250,10 +1232,6 @@ Author:
         
           <li>
             <a href="/2015/08/16/cmds-daily-use/">cmds_daily_use</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/27/Gitolite-README/">Gitolite README</a>
           </li>
         
       </ul>
