@@ -15,7 +15,7 @@
 <meta property="og:description" content="工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。
 （一）单目录多文件Makefile编写目录机构如下：
 ├── Libusb.c├── Libusb.h├── main.c├── makefile├── Makefile├── mybluet">
-<meta property="og:updated_time" content="2015-08-22T00:39:29.000Z">
+<meta property="og:updated_time" content="2015-09-29T01:57:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Makefile tutorial">
 <meta name="twitter:description" content="工作中主要是通过ndk交叉编译生产arm平台的可执行程序及库，但实际调试代码时还是在x86上会更方便一些，因此对于自己编写或者移植过来的代码中没有makefile的就需要自己编写makefile来进行编译。
@@ -138,11 +138,53 @@ main: $(OBJS)
 <span class="class">.PHONY</span>: clean
 clean:
     rm $(OBJS) main
-</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2>
+</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2><p>以下引用自博客园<a href="http://www.cnblogs.com/lidabo/p/4521117.html" target="_blank" rel="external">多目录下多文件 makefile编写</a><br>在编写多目录的makefile时，一般会用到如下的几个函数和变量；<br>函数：</p>
+<pre><code>wildcard 这是扩展通配符函数，功能是展开成一列所有符合由其参数描述的文 件名，文件间以空格间隔；比如：罗列出src下的所有.c文件：<span class="variable">$(</span>wildcard <span class="variable">${</span><span class="constant">SRC}</span>/*.c)
+
+patsubst 这是匹配替换函数， patsubst （ 需要匹配的文件样式，匹配替换成什么文件，需要匹配的源文件）函数。比如：用src下的*.c替换成对应的 *.o文件存放到obj中：<span class="variable">$(</span>patsubst  %.c, <span class="variable">${</span><span class="constant">OBJ}</span>/%.o, <span class="variable">$(</span>notdir <span class="variable">$(</span><span class="constant">SOURCE)</span>))
+
+notdir 这是去除路径函数，在上面patsubst函数中已经使用过，去除<span class="constant">SOURCE中</span>文件的所有目录，只留下文件名；
+</code></pre><p>变量：</p>
+<pre><code><span class="variable">$@</span><span class="symbol">:</span>表示目标文件；一般是在规则中这么用：gcc  -o <span class="variable">$@</span>  <span class="variable">$(</span>object)；
+
+<span class="variable">$^</span><span class="symbol">:</span>表示所有依赖文件；一般是在规则中这么用：gcc -o <span class="variable">$@</span>  <span class="variable">$^</span>  ；用所有依赖文件链接成目的文件；
+
+<span class="variable">$&lt;</span><span class="symbol">:</span>表示第一个依赖文件；在规则中使用：gcc -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span> ；其实这个时候就是每个依赖文件生成一个目的文件；
+</code></pre><p>makefile模板:</p>
+<pre><code><span class="comment">#把所有的目录做成变量，方便修改和移植   </span>
+ <span class="constant">BIN</span> = ./bin  
+ <span class="constant">SRC</span> = ./src  
+ <span class="constant">INC</span> = ./<span class="keyword">include</span>  
+ <span class="constant">OBJ</span> = ./obj  
+
+<span class="comment">#提前所有源文件(即：*.c文件)和所有中间文件(即：*.o)  </span>
+ <span class="constant">SOURCE</span> = <span class="variable">$(</span>wildcard <span class="variable">${</span><span class="constant">SRC</span>}/*.c)  
+ <span class="constant">OBJECT</span> = <span class="variable">$(</span>patsubst %.c,<span class="variable">${</span><span class="constant">OBJ</span>}/%.o,<span class="variable">$(</span>notdir <span class="variable">${</span><span class="constant">SOURCE</span>}))  
+
+<span class="comment">#设置最后目标文件  </span>
+ <span class="constant">TARGET</span> = main  
+ <span class="constant">BIN_TARGET</span> = <span class="variable">${</span><span class="constant">BIN</span>}/<span class="variable">${</span><span class="constant">TARGET</span>}  
+
+ <span class="constant">CC</span> = gcc   
+ <span class="constant">CFLAGS</span> = -g -<span class="constant">Wall</span> -<span class="constant">I</span><span class="variable">${</span><span class="constant">INC</span>}   
+
+<span class="comment">#用所有中间文件生成目的文件，规则中可以用 $^替换掉 ${OBJECT}  </span>
+ <span class="variable">${</span><span class="constant">BIN_TARGET</span>}<span class="symbol">:</span><span class="variable">${</span><span class="constant">OBJECT</span>}  
+     <span class="variable">$(</span><span class="constant">CC</span>) -o <span class="variable">$@</span> <span class="variable">${</span><span class="constant">OBJECT</span>}  
+
+<span class="comment">#生成各个中间文件  </span>
+ <span class="variable">${</span><span class="constant">OBJ</span>}/%.<span class="symbol">o:</span><span class="variable">${</span><span class="constant">SRC</span>}/%.c   
+     <span class="variable">$(</span><span class="constant">CC</span>) <span class="variable">$(</span><span class="constant">CFLAGS</span>) -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span>  
+
+ .<span class="constant">PHONY</span><span class="symbol">:clean</span>  
+ <span class="symbol">clean:</span>  
+     find <span class="variable">$(</span><span class="constant">OBJ</span>) -name *.o -exec rm -rf {} \; <span class="comment">#这个是find命令，不懂的可以查下资料  </span>
+     rm -rf <span class="variable">$(</span><span class="constant">BIN_TARGET</span>)  
+</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4o7nkf000qqyhjf0ohxc4y" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4pslx2000q4zhj4glivhr7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>

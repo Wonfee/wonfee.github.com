@@ -142,7 +142,7 @@ AndroidBoard<span class="class">.mk</span>  AndroidProducts<span class="class">.
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/09/29/porting-cyanogenmod/" data-id="cif4o7nk40006qyhjikyw8hau" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/09/29/porting-cyanogenmod/" data-id="cif4pslwq00064zhjwl6kilyt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -222,7 +222,7 @@ Package <span class="string">Complete:</span> <span class="regexp">/data/</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cif4o7nkb000jqyhje6x3ha53" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cif4pslwy000j4zhjueaz5t7x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a></li></ul>
@@ -340,7 +340,7 @@ done
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cif4o7njy0000qyhjabuc7xbp" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cif4pslw000004zhjd8b170fi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a></li></ul>
@@ -423,11 +423,53 @@ main: $(OBJS)
 <span class="class">.PHONY</span>: clean
 clean:
     rm $(OBJS) main
-</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2>
+</code></pre><h2 id="（二）多目录多文件makefile编写">（二）多目录多文件makefile编写</h2><p>以下引用自博客园<a href="http://www.cnblogs.com/lidabo/p/4521117.html" target="_blank" rel="external">多目录下多文件 makefile编写</a><br>在编写多目录的makefile时，一般会用到如下的几个函数和变量；<br>函数：</p>
+<pre><code>wildcard 这是扩展通配符函数，功能是展开成一列所有符合由其参数描述的文 件名，文件间以空格间隔；比如：罗列出src下的所有.c文件：<span class="variable">$(</span>wildcard <span class="variable">${</span><span class="constant">SRC}</span>/*.c)
+
+patsubst 这是匹配替换函数， patsubst （ 需要匹配的文件样式，匹配替换成什么文件，需要匹配的源文件）函数。比如：用src下的*.c替换成对应的 *.o文件存放到obj中：<span class="variable">$(</span>patsubst  %.c, <span class="variable">${</span><span class="constant">OBJ}</span>/%.o, <span class="variable">$(</span>notdir <span class="variable">$(</span><span class="constant">SOURCE)</span>))
+
+notdir 这是去除路径函数，在上面patsubst函数中已经使用过，去除<span class="constant">SOURCE中</span>文件的所有目录，只留下文件名；
+</code></pre><p>变量：</p>
+<pre><code><span class="variable">$@</span><span class="symbol">:</span>表示目标文件；一般是在规则中这么用：gcc  -o <span class="variable">$@</span>  <span class="variable">$(</span>object)；
+
+<span class="variable">$^</span><span class="symbol">:</span>表示所有依赖文件；一般是在规则中这么用：gcc -o <span class="variable">$@</span>  <span class="variable">$^</span>  ；用所有依赖文件链接成目的文件；
+
+<span class="variable">$&lt;</span><span class="symbol">:</span>表示第一个依赖文件；在规则中使用：gcc -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span> ；其实这个时候就是每个依赖文件生成一个目的文件；
+</code></pre><p>makefile模板:</p>
+<pre><code><span class="comment">#把所有的目录做成变量，方便修改和移植   </span>
+ <span class="constant">BIN</span> = ./bin  
+ <span class="constant">SRC</span> = ./src  
+ <span class="constant">INC</span> = ./<span class="keyword">include</span>  
+ <span class="constant">OBJ</span> = ./obj  
+
+<span class="comment">#提前所有源文件(即：*.c文件)和所有中间文件(即：*.o)  </span>
+ <span class="constant">SOURCE</span> = <span class="variable">$(</span>wildcard <span class="variable">${</span><span class="constant">SRC</span>}/*.c)  
+ <span class="constant">OBJECT</span> = <span class="variable">$(</span>patsubst %.c,<span class="variable">${</span><span class="constant">OBJ</span>}/%.o,<span class="variable">$(</span>notdir <span class="variable">${</span><span class="constant">SOURCE</span>}))  
+
+<span class="comment">#设置最后目标文件  </span>
+ <span class="constant">TARGET</span> = main  
+ <span class="constant">BIN_TARGET</span> = <span class="variable">${</span><span class="constant">BIN</span>}/<span class="variable">${</span><span class="constant">TARGET</span>}  
+
+ <span class="constant">CC</span> = gcc   
+ <span class="constant">CFLAGS</span> = -g -<span class="constant">Wall</span> -<span class="constant">I</span><span class="variable">${</span><span class="constant">INC</span>}   
+
+<span class="comment">#用所有中间文件生成目的文件，规则中可以用 $^替换掉 ${OBJECT}  </span>
+ <span class="variable">${</span><span class="constant">BIN_TARGET</span>}<span class="symbol">:</span><span class="variable">${</span><span class="constant">OBJECT</span>}  
+     <span class="variable">$(</span><span class="constant">CC</span>) -o <span class="variable">$@</span> <span class="variable">${</span><span class="constant">OBJECT</span>}  
+
+<span class="comment">#生成各个中间文件  </span>
+ <span class="variable">${</span><span class="constant">OBJ</span>}/%.<span class="symbol">o:</span><span class="variable">${</span><span class="constant">SRC</span>}/%.c   
+     <span class="variable">$(</span><span class="constant">CC</span>) <span class="variable">$(</span><span class="constant">CFLAGS</span>) -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span>  
+
+ .<span class="constant">PHONY</span><span class="symbol">:clean</span>  
+ <span class="symbol">clean:</span>  
+     find <span class="variable">$(</span><span class="constant">OBJ</span>) -name *.o -exec rm -rf {} \; <span class="comment">#这个是find命令，不懂的可以查下资料  </span>
+     rm -rf <span class="variable">$(</span><span class="constant">BIN_TARGET</span>)  
+</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4o7nkf000qqyhjf0ohxc4y" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cif4pslx2000q4zhj4glivhr7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
@@ -491,7 +533,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cif4o7nka000gqyhjgu0z93xu" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cif4pslwx000g4zhj9tbimp9j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -659,7 +701,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cif4o7nkj000xqyhjzrh2o0sq" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cif4pslx7000x4zhjzvpjybvg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -828,7 +870,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cif4o7nk20003qyhj8reg90cu" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cif4pslwo00034zhj2murhjqd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -950,7 +992,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cif4o7nk50007qyhjk1qwr5jk" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cif4pslwr00074zhjqvz55yjl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -1036,7 +1078,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cif4o7nk7000aqyhjrpachwzt" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cif4pslwt000a4zhjfhm98vd8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -1148,7 +1190,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cif4o7nkh000tqyhjppral8mf" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cif4pslx4000t4zhji8uac851" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
