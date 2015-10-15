@@ -3,18 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>cmds_daily_use | Wonfee&#39;s HomePage</title>
+  <title>Archives: 2015/10 | Wonfee&#39;s HomePage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="split大文件分割与合并分割：split -b 800M VS2012_ULT_chs.iso VS2012_ULT_chs.iso    1.6G Jun 24 10:54 VS2012_ULT_chs.iso    800M Jun 24 17:16 VS2012_ULT_chs.isoaa    768M Jun 24 17:16 VS2012_ULT_chs.isoab合并：cat VS">
-<meta property="og:type" content="article">
-<meta property="og:title" content="cmds_daily_use">
-<meta property="og:url" content="http://wonfee.github.io/2015/08/16/cmds-daily-use/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wonfee's HomePage">
+<meta property="og:url" content="http://wonfee.github.io/archives/2015/10/index.html">
 <meta property="og:site_name" content="Wonfee's HomePage">
-<meta property="og:description" content="split大文件分割与合并分割：split -b 800M VS2012_ULT_chs.iso VS2012_ULT_chs.iso    1.6G Jun 24 10:54 VS2012_ULT_chs.iso    800M Jun 24 17:16 VS2012_ULT_chs.isoaa    768M Jun 24 17:16 VS2012_ULT_chs.isoab合并：cat VS">
-<meta property="og:updated_time" content="2015-08-16T02:50:24.000Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cmds_daily_use">
-<meta name="twitter:description" content="split大文件分割与合并分割：split -b 800M VS2012_ULT_chs.iso VS2012_ULT_chs.iso    1.6G Jun 24 10:54 VS2012_ULT_chs.iso    800M Jun 24 17:16 VS2012_ULT_chs.isoaa    768M Jun 24 17:16 VS2012_ULT_chs.isoab合并：cat VS">
+<meta name="twitter:title" content="Wonfee's HomePage">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="Wonfee&#39;s HomePage" type="application/atom+xml">
   
@@ -64,106 +63,39 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-cmds-daily-use" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/16/cmds-daily-use/" class="article-date">
-  <time datetime="2015-08-16T02:49:29.000Z" itemprop="datePublished">2015-08-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      cmds_daily_use
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2015/10/15/Log-on-as-Administrator-in-win8/" class="archive-article-date">
+  <time datetime="2015-10-15T07:57:45.000Z" itemprop="datePublished">10月 15</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2015/10/15/Log-on-as-Administrator-in-win8/">Log on as Administrator in win8</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="split大文件分割与合并">split大文件分割与合并</h3><p>分割：<br>split -b 800M VS2012_ULT_chs.iso VS2012_ULT_chs.iso<br>    1.6G Jun 24 10:54 VS2012_ULT_chs.iso<br>    800M Jun 24 17:16 VS2012_ULT_chs.isoaa<br>    768M Jun 24 17:16 VS2012_ULT_chs.isoab<br>合并：<br>cat VS2012_ULT_chs.isoa* &gt; VS2012_ULT_chs.iso</p>
-<h3 id="ubuntu_apt_install_software">ubuntu apt install software</h3><p>apt-cache search xxx<br>sudo apt-get install xxx</p>
-<h3 id="search_cmd_belond_to_which_package">search cmd belond to which package</h3><p>dpkg -S `cmd`</p>
-<pre><code>dpkg -S \`<span class="keyword">which</span> <span class="keyword">ls</span>\`
-coreutils: /bin/<span class="keyword">ls</span>
-</code></pre><p>dpkg -L coreutils<br>/.<br>/bin<br>/bin/sync<br>/bin/cp<br>/bin/dir<br>/bin/mknod<br>/bin/cat<br>/bin/rm<br>/bin/rmdir<br>/bin/sleep<br>/bin/date<br>/bin/ls<br>…</p>
-<h3 id="打包压缩">打包压缩</h3><p>tar cvf xxx.tar xxx<br>tar zcvf xxx.tar.gz xxx         tar cvf xxx.tar xxx; gzip xxx.tar<br>tar jcvf xxx.tar.bz2 xxx        tar cvf xxx.tar xxx; bzip2 -z xxx.tar</p>
-<h3 id="解包解压">解包解压</h3><p>tar xvf  xxx.tar<br>tar zxvf xxx.tar.gz             gizp -d xxx.tar.gz; tar xvf xxx.tar<br>tar jxvf xxx.tar.bz2            bzip2 -d xxx.tar.bz2; tar xvf xxx.tar</p>
-<h3 id="查看内容">查看内容</h3><p>tar tvf  xxx.tar<br>tar ztvf xxx.gz<br>tar jtvf xxx.bz2</p>
-<h3 id="zip_加密">zip 加密</h3><p>zip -e secure.zip -r files_to_incrypt</p>
-<h3 id="sed_advanced_usage">sed advanced usage</h3><pre><code>sed <span class="string">'G'</span> <span class="built_in">file</span>        <span class="comment">#行间插入空行</span>
-sed <span class="string">'$!G'</span> <span class="built_in">file</span>      <span class="comment">#don't insert to the endline</span>
-</code></pre><p>sed ‘/^$/d; $!G’ file   #first delete all space lines and the insert a space line</p>
-<pre><code>sed <span class="string">'='</span> <span class="keyword">file</span>            #add <span class="built_in">line</span> <span class="keyword">number</span>
-sed <span class="string">'='</span> <span class="keyword">file</span> | sed <span class="string">'N; s/\n/ /'</span> #add <span class="built_in">line</span> <span class="keyword">number</span> <span class="keyword">to</span> <span class="built_in">line</span> start
-
-sed -<span class="keyword">n</span> <span class="string">'$p'</span> <span class="keyword">file</span> # <span class="keyword">print</span> <span class="keyword">last</span> <span class="built_in">line</span>
-</code></pre><p>sed ‘{:start; $q; N; 11,$D; b start}’ file  #首先检查是不是数据流中的最后一行，如果是，quit命令会停止循环N命令会将下一行附加到模式空间的当前行后，如果当前行在第10行后面，11,$D命令会删除模式空间中的第一行。</p>
-<pre><code><span class="title">sed</span> <span class="string">'/./,/^$/!d'</span> <span class="comment">#区间开始会匹配任何含有至少一个字符的行，区间的结束地址会匹配一个空行，在这个区间内的行不会被删除。用于删除多余空白行，只保留一个空白行</span>
-
-sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空白行，从含有字符行开始，一直到数据流结束，之间的行都不会被删除。</span>
-</code></pre><p>sed ‘{:start; /^\n*$/{$d; N; b start}}’ #删除行尾空白行</p>
-<pre><code>sed 's/<span class="variable">&lt;[^&gt;</span>]<span class="keyword">*</span>&gt;//g' <span class="comment">#删除HTML标签</span>
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cifrxpxfd000ghlhj73tx9xv0" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2015/08/22/Makefile-tutorial/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Makefile tutorial
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/06/27/Gitolite-README/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Gitolite README</div>
-    </a>
-  
-</nav>
-
-  
 </article>
-
-
-
-
-<section id="comments">
-  <!-- Duoshuo Comment BEGIN -->
-  <div class="ds-thread"></div>
-    <script type="text/javascript">
-      var duoshuoQuery = {short_name:"wonfee"};
-        (function() {
-          var ds = document.createElement('script');
-          ds.type = 'text/javascript';ds.async = true;
-          ds.src = 'http://static.duoshuo.com/embed.js';
-          ds.charset = 'UTF-8';
-          (document.getElementsByTagName('head')[0]
-          || document.getElementsByTagName('body')[0]).appendChild(ds);
-        })();
-  </script>
-<!-- Duoshuo Comment END -->
-</section>
-
+  
+  
+    </div></section>
+  
 </section>
         
           <aside id="sidebar">
