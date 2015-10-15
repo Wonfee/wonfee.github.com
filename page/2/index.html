@@ -65,6 +65,92 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-hexo-install" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/20/hexo-install/" class="article-date">
+  <time datetime="2015-06-20T05:57:35.000Z" itemprop="datePublished">2015-06-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/20/hexo-install/">hexo install</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="搭建_hexo_blog">搭建 hexo blog</h1><p>标签（空格分隔）： other</p>
+<hr>
+<p>安装 hexo：</p>
+<pre><code>mkdir hexo &amp;&amp; cd hexo
+sudo apt-get <span class="operator"><span class="keyword">install</span> npm
+npm <span class="keyword">install</span> hexo <span class="comment">--save</span>
+npm <span class="keyword">install</span> hexo-<span class="keyword">server</span> <span class="comment">--save</span>
+npm <span class="keyword">install</span> hexo-deployer-git <span class="comment">--save</span>
+
+tree -L <span class="number">1</span>
+.
+├── _config.yml
+├── db.json
+├── node_modules
+├── package.json
+├── <span class="keyword">public</span>
+├── scaffolds
+├── source
+└── themes
+
+
+js node_modules/hexo/<span class="keyword">bin</span>/hexo init</span>
+</code></pre><p>本地测试：</p>
+<pre><code>js node_modules<span class="regexp">/hexo/</span>bin/hexo g
+js node_modules<span class="regexp">/hexo/</span>bin/hexo s
+<span class="string">http:</span><span class="comment">//localhost:4000/</span>
+</code></pre><p>github 测试：</p>
+<pre><code>vim _config<span class="class">.yml</span>
+
+deploy:
+  type: git
+  repo: git@github<span class="class">.com</span>:Wonfee/wonfee<span class="class">.github</span><span class="class">.io</span><span class="class">.git</span>
+  branch: master
+
+npm install hexo-deployer-git --save
+js node_modules/hexo/bin/hexo g
+js node_modules/hexo/bin/hexo d
+</code></pre><p>写博客：</p>
+<pre><code><span class="label">js</span> node_modules/hexo/<span class="keyword">bin/hexo </span>n <span class="string">"My First Post"</span>
+</code></pre><p>编辑生成的 .md文件:</p>
+<pre><code>source<span class="regexp">/_posts/</span>My-First-Post.md
+js node_modules<span class="regexp">/hexo/</span>bin/hexo g
+js node_modules<span class="regexp">/hexo/</span>bin/hexo d
+</code></pre><p><a href="http://wonfee.github.io">My Home Page</a></p>
+<p>推荐博文编辑工具：<br><a href="https://www.zybuluo.com/cmd/" target="_blank" rel="external">Cmd Markdown</a><br><a href="http://www.jianshu.com/writer#/" target="_blank" rel="external">简书</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cifs1xyrd000aychjzblm54qm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-Linux-0-11-compile" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/20/Linux-0-11-compile/" class="article-date">
@@ -162,7 +248,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cifrxpxfl000whlhjjgi23g94" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cifs1xyrr000zychjt03roz0b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -274,7 +360,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cifrxpxfg000mhlhjv9sau234" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cifs1xyrm000pychj2xuid9j5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -324,7 +410,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cifrxpxfc000fhlhj0ous4x6y" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cifs1xyrf000fychjh6k6yklv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -359,7 +445,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -368,7 +454,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -377,7 +463,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -387,6 +473,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/10/15/android-reverse-tools/">android reverse tools</a>
+          </li>
         
           <li>
             <a href="/2015/10/15/Log-on-as-Administrator-in-win8/">Log on as Administrator in win8</a>
@@ -402,10 +492,6 @@ Author:
         
           <li>
             <a href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/22/Makefile-tutorial/">Makefile tutorial</a>
           </li>
         
       </ul>
