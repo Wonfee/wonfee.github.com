@@ -65,6 +65,105 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-huawei-k3v2oem1-kernel-compile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/19/huawei-k3v2oem1-kernel-compile/" class="article-date">
+  <time datetime="2015-10-19T00:23:51.000Z" itemprop="datePublished">2015-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/19/huawei-k3v2oem1-kernel-compile/">huawei k3v2oem1 kernel compile</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="compile_huawei_k3v2oem1_kernel">compile huawei k3v2oem1 kernel</h2><h3 id="get_source_code_:">get source code :</h3><p><a href="https://github.com/mangusta86/android_kernel_huawei_k3v2oem1.git" target="_blank" rel="external">android_kernel_huawei_k3v2oem1</a></p>
+<h3 id="pre-compile">pre-compile</h3><p>which device can use it ?<br> README_Version.txt</p>
+<pre><code>Kernel <span class="keyword">release</span> <span class="keyword">package</span> version instruction
+
+<span class="keyword">USE</span> zImage NOTE:
+
+<span class="number">1</span>¡¢This <span class="keyword">package</span> make <span class="keyword">out</span> zImage only, you have <span class="keyword">to</span> get ramdisk <span class="keyword">and</span> add kernel cmdline <span class="keyword">to</span> <span class="keyword">generate</span> a total boot.img before replace your phone<span class="attribute">'s</span> bootimage.
+<span class="number">2</span>¡¢<span class="keyword">If</span> your phone already enable secboot feature, please decrypt <span class="keyword">or</span> unlock the secboot feature first.
+<span class="number">3</span>¡¢Please make sure your phone software version <span class="keyword">is</span> same <span class="keyword">with</span> this <span class="keyword">release</span> <span class="keyword">package</span>, <span class="keyword">if</span> <span class="keyword">not</span>, please download the match version first.
+
+This kernel <span class="keyword">package</span> <span class="keyword">is</span> released <span class="keyword">for</span> the phone software version U9508 V100R001CHNC00B550
+</code></pre><p>how to compile it?<br>README_Kernel.txt</p>
+<pre><code><span class="comment">################################################################################</span>
+
+<span class="number">1</span>. <span class="constant">How</span> to <span class="constant">Build</span>
+    - get <span class="constant">Toolchain</span>
+        <span class="constant">From</span> android git server , codesourcery <span class="keyword">and</span> etc ..
+         - arm-linux-androideabi-<span class="number">4.6</span>
+
+    - edit <span class="constant">Makefile</span>
+        edit <span class="string">"CROSS_COMPILE"</span> to right toolchain path(<span class="constant">You</span> downloaded).
+          <span class="constant">EX</span>)   <span class="constant">CROSS_COMPILE</span>= <span class="variable">$(</span>android platform directory you download)/android/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-<span class="number">4.6</span>/bin/arm-linux-androideabi-
+          <span class="constant">Ex</span>)   <span class="constant">CROSS_COMPILE</span>=<span class="regexp">/usr/local</span><span class="regexp">/toolchain/arm</span>-linux-androideabi-<span class="number">4.6</span>/bin/arm-linux-androideabi-          <span class="regexp">//</span> check the location of toolchain
+          <span class="keyword">or</span>
+          <span class="constant">Ex</span>)<span class="constant">Exexport</span> <span class="constant">CROSS_COMPILE</span>=arm-linux-androideabi-
+          <span class="constant">Ex</span>)<span class="constant">Exexport</span> <span class="constant">PATH</span>=<span class="variable">$PATH</span><span class="symbol">:&lt;toolchain_parent_dir&gt;/arm-linux-androideabi-</span><span class="number">4.6</span>/bin
+
+        <span class="variable">$ </span>make <span class="constant">ARCH</span>=arm hisi_k3v2oem1_defconfig
+        <span class="variable">$ </span>make <span class="constant">ARCH</span>=arm zImage
+
+<span class="number">2</span>. <span class="constant">Output</span> files
+    - <span class="constant">Kernel</span> <span class="symbol">:</span> arch/arm/boot/zImage
+    - <span class="class"><span class="keyword">module</span> : <span class="title">drivers</span>/*/*.<span class="title">ko</span></span>
+
+<span class="number">3</span>. <span class="constant">How</span> to <span class="constant">Clean</span>
+        <span class="variable">$ </span>make <span class="constant">ARCH</span>=arm distclean
+<span class="comment">################################################################################</span>
+</code></pre><h3 id="compile">compile</h3><p>error fix:</p>
+<p><1> perl parse excel fail.<br>arch/arm/mach-k3v2/ipps_para_gen.pl line 3 error</1></p>
+<pre><code>make sure your have perl installed with perl -v
+<span class="operator"><span class="keyword">install</span> perl excel <span class="keyword">parse</span> library
+sudo cpan
+    <span class="keyword">install</span> OLE::Storage_Lite
+    <span class="keyword">install</span> Spreadsheet::ParseExcel</span>
+</code></pre><p><2> lzop not found.<br>OBJCOPY arch/arm/boot/Image<br>Kernel: arch/arm/boot/Image is ready<br>AS      arch/arm/boot/compressed/head.o<br>LZO     arch/arm/boot/compressed/piggy.lzo<br>/bin/sh: 1: lzop: not found<br>make[2]: <strong><em> [arch/arm/boot/compressed/piggy.lzo] Error 1<br>make<a href="https://github.com/mangusta86/android_kernel_huawei_k3v2oem1.git" target="_blank" rel="external">1</a>: </em></strong> [arch/arm/boot/compressed/vmlinux] Error 2<br>make: <em>*</em> [zImage] Error 2</2></p>
+<pre><code>sudo apt-<span class="keyword">get</span> install lzop
+</code></pre><h3 id="Test">Test</h3><p>repack boot.img , then flash it with fastboot, please make sure you had unlocked your phone.<br>huawei u9508 with this to unlock</p>
+<pre><code><span class="title">fastboot</span> oem unlock UUUUUUUUUUUUUUUU
+</code></pre><p>repack boot.img</p>
+<pre><code>mkboot <span class="keyword">boot</span>.img <span class="keyword">out</span>
+... <span class="keyword">replace</span> <span class="keyword">out</span>/zImage
+mkboot <span class="keyword">out</span> new_boot.img
+</code></pre><p>flash</p>
+<pre><code>adb reboot bootloader
+fastboot flash boot new_boot<span class="class">.img</span>
+or 
+fastboot flash:raw boot zImage ramdisk<span class="class">.gz</span>
+fastboot reboot
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/10/19/huawei-k3v2oem1-kernel-compile/" data-id="cifx7d8x20000mphjq6jcvk9j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-android-reverse-tools" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/15/android-reverse-tools/" class="article-date">
@@ -98,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/10/15/android-reverse-tools/" data-id="cifx7al6g000mjphjgj91ciox" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/10/15/android-reverse-tools/" data-id="cifx7c95c000ml3hjugp95fob" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reverse-tools/">reverse tools</a></li></ul>
@@ -141,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/10/15/Log-on-as-Administrator-in-win8/" data-id="cifx7al6o000wjphjgis68qxc" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/10/15/Log-on-as-Administrator-in-win8/" data-id="cifx7c95k000wl3hjlzz61gf0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/win8-administrator/">win8 administrator</a></li></ul>
@@ -233,7 +332,7 @@ AndroidBoard<span class="class">.mk</span>  AndroidProducts<span class="class">.
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/09/29/porting-cyanogenmod/" data-id="cifx7al5u0006jphjsqhjko5a" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/09/29/porting-cyanogenmod/" data-id="cifx7c94z0006l3hjsdptfy78" class="article-share-link">Share</a>
       
       
     </footer>
@@ -313,7 +412,7 @@ Package <span class="string">Complete:</span> <span class="regexp">/data/</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cifx7al6e000jjphjtleqvzdv" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/24/build-cm-11-source-code/" data-id="cifx7c95a000jl3hjdrs9zg7i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a></li></ul>
@@ -431,7 +530,7 @@ done
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cifx7al5m0000jphjv9rmhkij" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/CyanogenMod-Source-Code-Download/" data-id="cifx7c93x0000l3hjr6eh7a41" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a></li></ul>
@@ -560,7 +659,7 @@ notdir 这是去除路径函数，在上面patsubst函数中已经使用过，�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cifx7al6l000tjphj4kff2bbq" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/22/Makefile-tutorial/" data-id="cifx7c95g000tl3hjexs8yuwa" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/makefile-linux/">makefile linux</a></li></ul>
@@ -624,7 +723,7 @@ sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cifx7al6c000gjphjtzdr0gfh" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cifx7c958000gl3hjbh8iy3o7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
@@ -792,7 +891,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cifx7al6s0013jphjtm3paag0" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cifx7c95n0013l3hjxoslwy6o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -961,132 +1060,10 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cifx7al5t0003jphjut9ydd8e" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cifx7c94n0003l3hj96d98so0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-
-  
-    <article id="post-linux-driver-module" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/23/linux-driver-module/" class="article-date">
-  <time datetime="2015-06-23T06:30:17.000Z" itemprop="datePublished">2015-06-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="linux_device_driver_tutorial">linux device driver tutorial</h1><h2 id="The_first_driver:">The first driver:</h2><p>loading and removing the driver in user space<br>nothing.c</p>
-<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
-MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
-</code></pre><p>Makefile</p>
-<pre><code><span class="rule"><span class="attribute">obj-m </span>:<span class="value">= nothing.o</span></span>
-</code></pre><p>compile and test:</p>
-<p>$make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
-<p>或者</p>
-<p>make -C /lib/modules/`uname -r`/build M=`pwd` modules</p>
-<p>out: </p>
-<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-<span class="number">3.16</span>.0<span class="comment">'</span>
-  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.o
-  Building modules, stage <span class="number">2.</span>
-  MODPOST <span class="number">1</span> modules
-  CC      /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.<span class="keyword">mod</span>.o
-  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.ko
-
-  sudo insmod <span class="literal">nothing</span>.ko
-  lsmod |grep <span class="literal">nothing</span>
-  <span class="literal">nothing</span>                 <span class="number">8255</span>  <span class="number">0</span>
-  sudo rmmod <span class="literal">nothing</span>
-</code></pre><h2 id="The_“Hello_world”_driver:">The “Hello world” driver:</h2><p>loading and removing the driver in kernel space<br>hello.c</p>
-<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
-<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/init.h&gt;</span>
-<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span>
-
-MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
-
-<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span>
-</span>{
-    printk(KERN_DEBUG <span class="string">"Hello World !!!\n"</span>);
-    <span class="keyword">return</span> <span class="number">0</span>;
-}
-
-<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span>
-</span>{
-    printk(KERN_DEBUG <span class="string">"Bye bye !!!\n"</span>);
-}
-
-module_init(hello_init);
-module_exit(hello_exit);
-</code></pre><p>   make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
-<pre><code>make: Entering directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
-<span class="code">  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.o</span>
-<span class="code">  Building modules, stage 2.</span>
-<span class="code">  MODPOST 1 modules</span>
-<span class="label">WARNING: </span>"mcount" [/home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko] undefined!
-<span class="code">  CC      /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.mod.o</span>
-<span class="code">  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko</span>
-make: Leaving directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
-</code></pre><p> sudo insmod hello.ko </p>
-<pre><code>insmod: ERROR: could not <span class="operator"><span class="keyword">insert</span> <span class="keyword">module</span> hello.ko: <span class="keyword">Unknown</span> symbol <span class="keyword">in</span> <span class="keyword">module</span></span>
-</code></pre><p>dmesg |tail </p>
-<pre><code>...
-<span class="attr_selector">[21684.565795]</span> <span class="rule"><span class="attribute">hello</span>:<span class="value"> Unknown symbol mcount (err <span class="number">0</span>)</span></span>
-</code></pre><p>加载内核模块出错，网上说是gcc 版本问题，当前使用的gcc是软链接到gcc-4.4,这是之前为了编译android源码时将gcc从4.8降到了4.4,重新将gcc链接到4.8：<br>gcc -v</p>
-<pre><code><span class="tag">gcc</span> <span class="tag">version</span> 4<span class="class">.8</span><span class="class">.2</span> (<span class="tag">Ubuntu</span> 4<span class="class">.8</span><span class="class">.2-19ubuntu1</span>)
-</code></pre><p>make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel/ M=`pwd` modules</p>
-<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-3.16.0'
-  <span class="keyword">CC</span> [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.o
-  Building modules, stage 2.
-  MODPOST 1 modules
-  <span class="keyword">CC</span>      /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.mod.o
-  LD [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.ko
-make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
-</code></pre><p> sudo insmod hello.ko<br> dmesg |tail -n 1</p>
-<pre><code>[<span class="number">22644.697688</span>] <span class="variable">Hello</span> <span class="variable">World</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
-</code></pre><p>sudo rmmod hello<br>dmesg |tail -n 1</p>
-<pre><code>[<span class="number">22663.379104</span>] <span class="variable">Bye</span> <span class="function_or_atom">bye</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
-</code></pre><p>Makefile</p>
-<pre><code><span class="comment">//------------ General Makefile------------------</span>
- obj-<span class="keyword">m</span> := hello.o
- KERNELDIR := /lib/modules/$(<span class="keyword">shell</span> uname -r)/build
- <span class="keyword">PWD</span> := $(<span class="keyword">shell</span> <span class="keyword">pwd</span>)
- modules:
-     $(MAKE) -C $(KERNELDIR) <span class="keyword">M</span>=$(<span class="keyword">PWD</span>) modules
-</code></pre><p> modules_install:<br>     $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install</p>
-<p>编译模块，可以使用如下两种方式：</p>
-<pre><code><span class="label">$make</span> -C /usr/src/linux-xxx <span class="keyword">M</span>=`<span class="keyword">pwd</span>` modules
-</code></pre><p>$make -C /lib/modules/<code>uname -r</code>/build M=<code>pwd</code> modules</p>
-<p>两者效果相同， 只是使用的源码路径不一样，usr/src目录下那个源代码一般是我们自己下载后解压的或者系统更新时下载的，而lib目录下的则是在编译时自动copy过去的，两者其实是完全一样的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cifx7al5v0007jphjl2l8prn3" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -1120,7 +1097,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1129,7 +1106,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -1138,7 +1115,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -1148,6 +1125,10 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/10/19/huawei-k3v2oem1-kernel-compile/">huawei k3v2oem1 kernel compile</a>
+          </li>
         
           <li>
             <a href="/2015/10/15/android-reverse-tools/">android reverse tools</a>
@@ -1163,10 +1144,6 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
         
           <li>
             <a href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
           </li>
         
       </ul>

@@ -65,6 +65,128 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux-driver-module" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/23/linux-driver-module/" class="article-date">
+  <time datetime="2015-06-23T06:30:17.000Z" itemprop="datePublished">2015-06-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="linux_device_driver_tutorial">linux device driver tutorial</h1><h2 id="The_first_driver:">The first driver:</h2><p>loading and removing the driver in user space<br>nothing.c</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
+MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
+</code></pre><p>Makefile</p>
+<pre><code><span class="rule"><span class="attribute">obj-m </span>:<span class="value">= nothing.o</span></span>
+</code></pre><p>compile and test:</p>
+<p>$make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
+<p>或者</p>
+<p>make -C /lib/modules/`uname -r`/build M=`pwd` modules</p>
+<p>out: </p>
+<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-<span class="number">3.16</span>.0<span class="comment">'</span>
+  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.o
+  Building modules, stage <span class="number">2.</span>
+  MODPOST <span class="number">1</span> modules
+  CC      /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.<span class="keyword">mod</span>.o
+  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/<span class="literal">nothing</span>/<span class="literal">nothing</span>.ko
+
+  sudo insmod <span class="literal">nothing</span>.ko
+  lsmod |grep <span class="literal">nothing</span>
+  <span class="literal">nothing</span>                 <span class="number">8255</span>  <span class="number">0</span>
+  sudo rmmod <span class="literal">nothing</span>
+</code></pre><h2 id="The_“Hello_world”_driver:">The “Hello world” driver:</h2><p>loading and removing the driver in kernel space<br>hello.c</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/module.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/init.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span>
+
+MODULE_LICENSE(<span class="string">"Dual BSD/GPL"</span>);
+
+<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_init</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    printk(KERN_DEBUG <span class="string">"Hello World !!!\n"</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello_exit</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    printk(KERN_DEBUG <span class="string">"Bye bye !!!\n"</span>);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+</code></pre><p>   make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel M=`pwd` modules</p>
+<pre><code>make: Entering directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
+<span class="code">  CC [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.o</span>
+<span class="code">  Building modules, stage 2.</span>
+<span class="code">  MODPOST 1 modules</span>
+<span class="label">WARNING: </span>"mcount" [/home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko] undefined!
+<span class="code">  CC      /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.mod.o</span>
+<span class="code">  LD [M]  /home/wonfee/wonfee/linux/driver-tutorial/helloworld/hello.ko</span>
+make: Leaving directory <span class="smartquote">`/usr/src/linux-lts-utopic-3.16.0'</span>
+</code></pre><p> sudo insmod hello.ko </p>
+<pre><code>insmod: ERROR: could not <span class="operator"><span class="keyword">insert</span> <span class="keyword">module</span> hello.ko: <span class="keyword">Unknown</span> symbol <span class="keyword">in</span> <span class="keyword">module</span></span>
+</code></pre><p>dmesg |tail </p>
+<pre><code>...
+<span class="attr_selector">[21684.565795]</span> <span class="rule"><span class="attribute">hello</span>:<span class="value"> Unknown symbol mcount (err <span class="number">0</span>)</span></span>
+</code></pre><p>加载内核模块出错，网上说是gcc 版本问题，当前使用的gcc是软链接到gcc-4.4,这是之前为了编译android源码时将gcc从4.8降到了4.4,重新将gcc链接到4.8：<br>gcc -v</p>
+<pre><code><span class="tag">gcc</span> <span class="tag">version</span> 4<span class="class">.8</span><span class="class">.2</span> (<span class="tag">Ubuntu</span> 4<span class="class">.8</span><span class="class">.2-19ubuntu1</span>)
+</code></pre><p>make -C /usr/src/linux-headers-3.16.7-ckt5my-very-own-kernel/ M=`pwd` modules</p>
+<pre><code>make: Entering directory `/usr/src/linux-lts-utopic-3.16.0'
+  <span class="keyword">CC</span> [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  <span class="keyword">CC</span>      /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.mod.o
+  LD [<span class="keyword">M</span>]  /home/wonfee/wonfee/linux/driver-<span class="keyword">tutorial</span>/helloworld/hello.ko
+make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
+</code></pre><p> sudo insmod hello.ko<br> dmesg |tail -n 1</p>
+<pre><code>[<span class="number">22644.697688</span>] <span class="variable">Hello</span> <span class="variable">World</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
+</code></pre><p>sudo rmmod hello<br>dmesg |tail -n 1</p>
+<pre><code>[<span class="number">22663.379104</span>] <span class="variable">Bye</span> <span class="function_or_atom">bye</span> <span class="exclamation_mark">!</span><span class="exclamation_mark">!</span><span class="exclamation_mark">!</span>
+</code></pre><p>Makefile</p>
+<pre><code><span class="comment">//------------ General Makefile------------------</span>
+ obj-<span class="keyword">m</span> := hello.o
+ KERNELDIR := /lib/modules/$(<span class="keyword">shell</span> uname -r)/build
+ <span class="keyword">PWD</span> := $(<span class="keyword">shell</span> <span class="keyword">pwd</span>)
+ modules:
+     $(MAKE) -C $(KERNELDIR) <span class="keyword">M</span>=$(<span class="keyword">PWD</span>) modules
+</code></pre><p> modules_install:<br>     $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install</p>
+<p>编译模块，可以使用如下两种方式：</p>
+<pre><code><span class="label">$make</span> -C /usr/src/linux-xxx <span class="keyword">M</span>=`<span class="keyword">pwd</span>` modules
+</code></pre><p>$make -C /lib/modules/<code>uname -r</code>/build M=<code>pwd</code> modules</p>
+<p>两者效果相同， 只是使用的源码路径不一样，usr/src目录下那个源代码一般是我们自己下载后解压的或者系统更新时下载的，而lib目录下的则是在编译时自动copy过去的，两者其实是完全一样的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cifx7c9510007l3hjcapcpuoz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-hexo-install" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/20/hexo-install/" class="article-date">
@@ -136,7 +258,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cifx7al69000ajphjvp3vg992" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cifx7c955000al3hjguznlu2c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -248,7 +370,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cifx7al6q000zjphjoq0omrql" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cifx7c95l000zl3hj1zksfb4g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -360,7 +482,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cifx7al6i000pjphjesyavcn4" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cifx7c95e000pl3hj1qm2snq2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -410,7 +532,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cifx7al6b000fjphjnrpwhw2i" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cifx7c957000fl3hj8k844bjg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -445,7 +567,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -454,7 +576,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -463,7 +585,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -473,6 +595,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/10/19/huawei-k3v2oem1-kernel-compile/">huawei k3v2oem1 kernel compile</a>
+          </li>
         
           <li>
             <a href="/2015/10/15/android-reverse-tools/">android reverse tools</a>
@@ -488,10 +614,6 @@ Author:
         
           <li>
             <a href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/22/CyanogenMod-Source-Code-Download/">CyanogenMod Source Code Download</a>
           </li>
         
       </ul>
