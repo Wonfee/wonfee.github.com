@@ -65,6 +65,175 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-scm-command-line" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/23/scm-command-line/" class="article-date">
+  <time datetime="2015-06-23T08:06:09.000Z" itemprop="datePublished">2015-06-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/23/scm-command-line/">scm command line</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="scm_command_line_usage">scm command line usage</h1><p>这里介绍下工作中经常使用的到的代码管理工具svn 和git的常用命令， 本人对svn使用的比较少，工作中主要使用git。</p>
+<h1 id="svn_command_line">svn command line</h1><p>将文件从服务器更新到本地版本库：<br>svn checkout path (path 为svn仓库路径)<br>例如：</p>
+<pre><code>svn checkout <span class="symbol">file:</span>/<span class="regexp">//</span><span class="constant">F</span><span class="symbol">:/svn_test</span>
+svn co <span class="symbol">http:</span>/<span class="regexp">/xx.xx.xx.xx/svn</span><span class="regexp">/svn_test</span>
+</code></pre><p>添加文件到版本库<br>svn add file(folder)<br>例如：</p>
+<pre><code>svn <span class="keyword">add</span> <span class="keyword">test</span>.c
+</code></pre><p>查看文件或者目录状态<br>svn status path(file)</p>
+<pre><code>svn <span class="keyword">st</span> <span class="keyword">test</span>.c
+</code></pre><p>将改动的文件提交到版本库<br>svn commit -m “LogMessage“ [-N] [—no-unlock] PATH(如果选择了保持锁，就使用–no-unlock开关)<br>例如：</p>
+<pre><code>svn <span class="keyword">ci</span> -<span class="keyword">m</span> <span class="string">"update test.c"</span> <span class="keyword">test</span>.c
+</code></pre><p>更新版本库<br>svn update<br>svn update如果后面没有目录，默认将当前目录以及子目录下的所有文件都更新到最新版本。<br>svn update -r 200 test.c(将版本库中的文件test.c还原到版本200)<br>svn update test.c(更新，于版本库同步。如果在提交的时候提示过期的话，是因为冲突，需要先update，修改文件，然后清除svn resolved，最后再提交commit)<br>例如：</p>
+<pre><code><span class="title">svn</span> up
+</code></pre><p>删除文件<br>svn delete file -m “delete file”<br>例如：</p>
+<pre><code>svn <span class="tag">del</span> test<span class="class">.c</span>
+svn ci -m <span class="string">"delete test.c"</span>
+</code></pre><p>查看日志</p>
+<pre><code>svn <span class="command">log</span> path
+</code></pre><p>查看文件信息</p>
+<pre><code><span class="title">svn</span> <span class="built_in">info</span> path
+</code></pre><p>比较差异</p>
+<pre><code>svn diff <span class="built_in">path</span>
+</code></pre><h1 id="git_command_line">git command line</h1><p>初始化纯仓库</p>
+<pre><code>mkdir project<span class="class">.git</span> &amp;&amp; cd project<span class="class">.git</span>
+git init --bare
+</code></pre><p>初始化仓库并添加到服务器</p>
+<pre><code><span class="label">cd</span> myproject
+<span class="label">git</span> init 
+<span class="label">git</span> <span class="keyword">add </span>.
+<span class="label">git</span> commit -m <span class="string">"initialize repo"</span>
+<span class="label">git</span> remote <span class="keyword">add </span>origin xxx/project.git
+<span class="label">git</span> <span class="keyword">push </span>origin master
+</code></pre><p>克隆仓库</p>
+<pre><code>git clone xxx/project<span class="class">.git</span> 
+or
+git clone xxx/project<span class="class">.git</span> mywork
+</code></pre><p>查看远端分支</p>
+<pre><code><span class="label">git</span> <span class="keyword">branch </span>-r
+</code></pre><p>新建并切换到远端对应的分支：</p>
+<pre><code>git checkout -<span class="tag">b</span> new_branch
+</code></pre><p>分支操作</p>
+<pre><code>git branch develop    <span class="preprocessor">#创建一个名为develop的本地分支</span>
+git checkout develop    <span class="preprocessor">#切换到本地的develop分支上</span>
+git <span class="keyword">push</span> origin develop     <span class="preprocessor">#创建远端develop分支</span>
+git checkout --track origin/develop <span class="preprocessor">#拉取远端develop分支</span>
+git <span class="keyword">push</span> origin develop:develop    <span class="preprocessor">#提交分支到远端</span>
+git <span class="keyword">push</span> origin :develop<span class="preprocessor">#删除远端develop分支</span>
+git fetch --prune    <span class="preprocessor">#删除已经不存在的远端分支</span>
+</code></pre><p>标签操作</p>
+<pre><code>git tags        <span class="comment">#显示已有标签</span>
+git tag v1.<span class="number">1.09</span>     <span class="comment">#创建轻量级标签</span>
+git tag -a v1.<span class="number">1.0</span> -m “comments <span class="keyword">for</span> the tag”the<span class="comment">#创建含附注标签</span>
+git push origin v1.<span class="number">1.06</span>     <span class="comment">#将标签推送到远端服务器</span>
+git push origin --tags<span class="comment">#一次推送所有本地新增标签</span>
+git push origin <span class="symbol">:refs/tags/v1</span>.<span class="number">1.06</span><span class="comment">#删除远端v1.1.0标签</span>
+git tag -d v1.<span class="number">1.06</span>      <span class="comment">#删除本地v1.1.0标签</span>
+</code></pre><p>添加.gitignore<br>通常将不需要纳入git管理，又不希望总是出现在未跟踪文件列表里的文件（如编译过程中生成的文件等等），通过创建.gitignore文件来忽略它们，规则请google。<br>若.gitignore失效，可如下操作</p>
+<pre><code>git rm -rf <span class="comment">--cached .</span>
+git add .
+git <span class="operator"><span class="keyword">commit</span> -m “<span class="keyword">now</span> .gitignore should working”</span>
+</code></pre><p>服务器地址变更后，工作目录做如下操作</p>
+<pre><code>git remote set-url origin git@xxx<span class="class">.xxx</span><span class="class">.xxx</span><span class="class">.xxx</span>:/home/git/repositories/project<span class="class">.git</span>
+git remote show origin  #查看变更后的远程仓库信息
+</code></pre><p>git仓库服务器迁移</p>
+<pre><code>git clone --bare git<span class="variable">@oldserver</span><span class="symbol">:project</span>.git  <span class="comment">#从原服务器获取纯仓库</span>
+cd project.git
+git push --mirror git<span class="variable">@newserver</span><span class="symbol">:newproject</span>.git <span class="comment">#以镜像方式将仓库推送到新的服务器 </span>
+</code></pre><p>分支工作流程</p>
+<pre><code>git pull<span class="comment">#获取服务器最新的代码</span>
+git checkout -b foobar<span class="comment">#创建并切换到一个本地分支</span>
+… hack hack hcak …创建并切换到一个本地分支<span class="comment">#在本地的该分支上做开发</span>
+git status<span class="comment">#查看修改</span>
+git checkout <span class="comment">--files        #取消修改</span>
+git <span class="built_in">add</span> <span class="built_in">files</span><span class="comment">#暂存修改</span>
+git reset HEAD xxx<span class="comment">#取消暂存</span>
+git <span class="built_in">add</span> xxx     <span class="comment">#暂存修改</span>
+git commit    <span class="comment">#提交</span>
+git checkout master<span class="comment">#切换到本地master分支</span>
+git <span class="built_in">merge</span> <span class="comment">--no-ff foobar#将foobar分支的merge到master分支</span>
+git push origin master<span class="comment">#更新到远端master分支</span>
+git branch -d foorbar<span class="comment">#删除本地foobar分支</span>
+git branch -D foobar<span class="comment">#若要删除未merge的foobar分支使用-D</span>
+</code></pre><p>撤销未更新到远端的commit</p>
+<pre><code>git <span class="keyword">log</span>    <span class="comment">#查看提交的commit</span>
+git <span class="keyword">reset</span> --mixed  commit<span class="comment">#回到待add状态</span>
+git <span class="keyword">reset</span> --soft   commit<span class="comment">#回到待commit状态</span>
+git <span class="keyword">reset</span> --hard  commit<span class="comment">#清楚所有修改 (注：会撤销所有的修改)</span>
+</code></pre><p>撤销已更新到远端的commit（注：该操作会丢掉所有该commit之后的更新）,若有其他人已更新，则也需要在其工作目录回退到对应的commit。</p>
+<pre><code>git <span class="keyword">log</span>    <span class="comment">#查看提交的commit</span>
+git <span class="keyword">reset</span> --hard commit<span class="comment">#回退到某个commit状态</span>
+git <span class="keyword">push</span> origin develop -foobar<span class="comment">#强制更新到远端服务器 </span>
+</code></pre><p>撤销已更新到远端的提交：(git revert <sha>，当执行过git push后，想安全撤销该次的push操作)</sha></p>
+<pre><code>git <span class="keyword">log</span>    <span class="comment"># 1.查看该次提交的sha1值</span>
+    commit <span class="number">2996</span>d7ff2b345c826b51da922b63e8efadb6b146
+    Author: Wonfee &lt;dasifly<span class="variable">@gmail</span>.com&gt;
+    Date:   Thu Jul <span class="number">2</span> 08:<span class="number">16</span>:<span class="number">52</span> <span class="number">2015</span> +080<span class="number">0</span>
+    remove useless file
+
+git revert <span class="number">2996</span>d7ff2b345c826b51da922b63e8efadb6b146 <span class="comment"># 2.执行revert操作</span>
+git <span class="keyword">push</span>   <span class="comment"># 3.更新到远端仓库</span>
+这样就可以将上次的commit安全的撤销
+</code></pre><p>stash 使用<br>当你在某个分支进行的开发工作还没完成时，此时主分支发现有bug必须立即去修复，而此时又不想提交还没完成的分支开发，可以使用stash来储存你的开发。</p>
+<pre><code>… hack hack hack …
+git stash
+<span class="keyword">fix</span> emergency bugs
+git commit
+git stash <span class="keyword">pop</span>
+… <span class="keyword">continue</span> hacking …
+</code></pre><p>rebase使用</p>
+<pre><code>git checkout -b feature_dev dev
+bala bala …
+git <span class="built_in">add</span> xxx
+git commit -<span class="operator">a</span> “xxxx”xxxx        <span class="comment">#在临时分支上做开发提交</span>
+git checkout dev                <span class="comment">#切回本地dev分支</span>
+git pull origin develop        <span class="comment">#将远程dev分支更新到本地</span>
+git checkout  feature_dev       <span class="comment">#切回临时开发分支</span>
+git rebase dev                  <span class="comment"># 执行 rebase操作</span>
+git checkout dev                <span class="comment">#切回本地dev分支</span>
+git <span class="built_in">merge</span> <span class="comment">--no-ff  feature_dev  #合并临时分支</span>
+git push origin dev             <span class="comment">#更新到服务器</span>
+git branch -d  feature_dev      <span class="comment"># 删除临时分支</span>
+</code></pre><p>其他常用命令</p>
+<pre><code>gitk图形化工具，方便查看项目的更新情况
+git diff xxx            查看修改的差异
+git <span class="keyword">log</span>                 查看提交的commit
+git <span class="built_in">tag</span>                 查看所有的<span class="built_in">tag</span>
+git checkout commit     切换到某个commit
+git checkout <span class="built_in">tag</span>    切换到某个标签
+</code></pre><p>推荐书籍：<br>progit.zh.pdf<br>Git权威指南.pdf</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cigj4cp8u000316hjqjz6fe0k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-linux-driver-module" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/23/linux-driver-module/" class="article-date">
@@ -172,7 +341,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cifx7c9510007l3hjcapcpuoz" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cigj4cp8x000716hju7ynrylg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -258,7 +427,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cifx7c955000al3hjguznlu2c" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cigj4cp9b000d16hjauj1bxj7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -370,7 +539,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cifx7c95l000zl3hj1zksfb4g" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cigj4cp9r001516hjf8xwqpmq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -482,7 +651,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cifx7c95e000pl3hj1qm2snq2" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cigj4cp9m000v16hj6u97nxdt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -532,7 +701,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cifx7c957000fl3hj8k844bjg" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cigj4cp9c000i16hjx5sc4150" class="article-share-link">Share</a>
       
       
     </footer>
@@ -567,7 +736,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libusb-win32/">libusb-win32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -576,7 +745,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/libusb-win32/" style="font-size: 10px;">libusb-win32</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -585,7 +754,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -595,6 +764,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/11/03/add-libusb-win32-to-vc-project/">add libusb-win32 to vc project</a>
+          </li>
         
           <li>
             <a href="/2015/10/19/huawei-k3v2oem1-kernel-compile/">huawei k3v2oem1 kernel compile</a>
@@ -610,10 +783,6 @@ Author:
         
           <li>
             <a href="/2015/09/29/porting-cyanogenmod/">porting cyanogenmod</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/24/build-cm-11-source-code/">build cm-11 source code</a>
           </li>
         
       </ul>
