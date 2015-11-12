@@ -65,6 +65,174 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Gitolite-README" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/27/Gitolite-README/" class="article-date">
+  <time datetime="2015-06-27T05:27:33.000Z" itemprop="datePublished">2015-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/27/Gitolite-README/">Gitolite README</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>===============</p>
+<h2 id="about_this_README">about this README</h2><p>Which is copied from <a href="https://github.com/sitaramc/gitolite.git" target="_blank" rel="external">gitolite’s repo</a>.</p>
+<p><strong>(Github-users: click the “wiki” link before sending me anything via github.)</strong></p>
+<p><strong>This is a minimal README for gitolite</strong>, so you can quickly get started with:</p>
+<ul>
+<li>installing gitolite on a fresh userid on a Unix(-like) machine</li>
+<li>learning enough to do some basic access control</li>
+</ul>
+<p><strong>For anything more, you need to look at the complete documentation, at:<br><a href="http://gitolite.com/gitolite" target="_blank" rel="external">http://gitolite.com/gitolite</a></strong>.  Please go there for what/why/how, concepts,<br>background, troubleshooting, more details on what is covered here, advanced<br>features not covered here, migration from older gitolite, and many more<br>topics.</p>
+<!-- --------------------------------------------------------------------- -->
+<h2 id="Assumptions">Assumptions</h2><ul>
+<li><p>You are familiar with:</p>
+<ul>
+<li>OS: at least one Unix-like OS</li>
+<li>ssh: ssh, ssh keys, ssh authorized keys file</li>
+<li>git: basic use of git, bare and non-bare remotes</li>
+</ul>
+</li>
+<li><p>You are setting up a fresh, ssh-based, installation of gitolite on a Unix<br>machine of some sort.</p>
+</li>
+<li><p>You have root access, or someone has created a userid called “git” for you<br>to use and given you a password for it.  This is a brand new userid (or<br>you have deleted everything but <code>.bashrc</code> and similar files to make it<br>look like one!)</p>
+</li>
+<li><p>If your server is not connected to the internet, you know how to clone the<br>gitolite source code by using some in-between server or “git bundle”.</p>
+</li>
+</ul>
+<!-- --------------------------------------------------------------------- -->
+<h2 id="Installation_and_setup">Installation and setup</h2><h3 id="server_requirements">server requirements</h3><ul>
+<li>any unix system</li>
+<li>sh</li>
+<li>git 1.6.6 or later</li>
+<li>perl 5.8.8 or later</li>
+<li>openssh 5.0 or later</li>
+<li>a dedicated userid to host the repos (in this document, we assume it is<br>“git”, but it can be anything; substitute accordingly)</li>
+<li>this user id does NOT currently have any ssh pubkey-based access<ul>
+<li>ideally, this user id has shell access ONLY by “su - git” from some<br>other userid on the same server (this ensure minimal confusion for ssh<br>newbies!)</li>
+</ul>
+</li>
+</ul>
+<h3 id="steps_to_install">steps to install</h3><p>First, prepare the ssh key:</p>
+<ul>
+<li>login to “git” on the server</li>
+<li>make sure <code>~/.ssh/authorized_keys</code> is empty or non-existent</li>
+<li>make sure your ssh public key from your workstation has been copied as<br>$HOME/YourName.pub</li>
+</ul>
+<p>Next, install gitolite by running these commands:</p>
+<pre><code>git clone git:<span class="comment">//github.com/sitaramc/gitolite</span>
+mkdir -<span class="tag">p</span> <span class="variable">$HOME</span>/bin
+gitolite/install -to <span class="variable">$HOME</span>/bin
+</code></pre><p>Finally, setup gitolite with yourself as the administrator:</p>
+<pre><code><span class="tag">gitolite</span> <span class="tag">setup</span> <span class="tag">-pk</span> <span class="tag">YourName</span><span class="class">.pub</span>
+</code></pre><p>If the last command doesn’t run perhaps “bin” is not in your “PATH”. You can<br>either add it, or just run:</p>
+<pre><code><span class="label">$HOME</span>/<span class="keyword">bin/gitolite </span>setup -pk YourName.pub
+</code></pre><p>If you get any other errors please refer to the online documentation whose URL<br>was given at the top of this file.</p>
+<h2 id="adding_users_and_repos">adding users and repos</h2><p><em>Do NOT add new repos or users manually on the server.</em>  Gitolite users,<br>repos, and access rules are maintained by making changes to a special repo<br>called “gitolite-admin” and <em>pushing</em> those changes to the server.</p>
+<p>To administer your gitolite installation, start by doing this on your<br>workstation (if you have not already done so):</p>
+<pre><code>git clone git<span class="variable">@host</span><span class="symbol">:gitolite-admin</span>
+</code></pre><blockquote>
+<hr>
+<p>  <strong>NOTE: if you are asked for a password, something went wrong.</strong>.  Go hit<br>  the link for the complete documentation earlier in this file.</p>
+<hr>
+</blockquote>
+<p>Now if you “cd gitolite-admin”, you will see two subdirectories in it: “conf”<br>and “keydir”.</p>
+<p>To add new users alice, bob, and carol, obtain their public keys and add them<br>to “keydir” as alice.pub, bob.pub, and carol.pub respectively.</p>
+<p>To add a new repo “foo” and give different levels of access to these<br>users, edit the file “conf/gitolite.conf” and add lines like this:</p>
+<pre><code>repo foo
+<span class="constant">    RW+</span>         =   alice
+<span class="constant">    RW</span>          =   bob
+<span class="constant">    R</span>           =   carol
+</code></pre><p>Once you have made these changes, do something like this:</p>
+<pre><code>git <span class="keyword">add</span> conf
+git <span class="keyword">add</span> keydir
+git commit -m <span class="string">"added foo, gave access to alice, bob, carol"</span>
+git <span class="keyword">push</span>
+</code></pre><p>When the push completes, gitolite will add the new users to<br><code>~/.ssh/authorized_keys</code> on the server, as well as create a new, empty, repo<br>called “foo”.</p>
+<h2 id="help_for_your_users">help for your users</h2><p>Once a user has sent you their public key and you have added them as<br>specified above and given them access, you have to tell them what URL to<br>access their repos at.  This is usually “git clone git@host:reponame”; see<br>man git-clone for other forms.</p>
+<p><strong>NOTE</strong>: again, if they are asked for a password, something is wrong.</p>
+<p>If they need to know what repos they have access to, they just have to run<br>“ssh git@host info”.</p>
+<h2 id="access_rule_examples">access rule examples</h2><p>Gitolite’s access rules are very powerful.  The simplest use was already<br>shown above.  Here is a slightly more detailed example:</p>
+<pre><code>repo foo
+    RW+                     =   alice
+    -<span class="ruby">   master              =   bob
+</span>    -<span class="ruby">   refs/tags/v[<span class="number">0</span>-<span class="number">9</span>]    =   bob
+</span>    RW                      =   bob
+    RW  refs/tags/v[0-9]    =   carol
+    R                       =   dave
+</code></pre><p>Here’s what these example rules say:</p>
+<ul>
+<li><p>alice can do anything to any branch or tag — create, push,<br>delete, rewind/overwrite etc.</p>
+</li>
+<li><p>bob can create or fast-forward push any branch whose name does<br>not start with “master” and create any tag whose name does not<br>start with “v”+digit.</p>
+</li>
+<li><p>carol can create tags whose names start with “v”+digit.</p>
+</li>
+<li><p>dave can clone/fetch.</p>
+</li>
+</ul>
+<p>Please see the main documentation linked above for all the gory details, as<br>well as more features and examples.</p>
+<h2 id="groups">groups</h2><p>Gitolite allows you to group users or repos for convenience.  Here’s an<br>example that creates two groups of users:</p>
+<pre><code><span class="variable">@staff</span>      =   alice bob carol
+<span class="variable">@interns</span>    =   ashok
+
+repo secret
+    RW      =   <span class="variable">@staff</span>
+
+repo foss
+    RW+     =   <span class="variable">@staff</span>
+    RW      =   <span class="variable">@interns</span>
+</code></pre><p>Group lists accumulate.  The following two lines have the same effect as<br>the earlier definition of @staff above:</p>
+<pre><code><span class="variable">@staff</span>      =   alice bob
+<span class="variable">@staff</span>      =   carol
+</code></pre><p>You can also use group names in other group names:</p>
+<pre><code><span class="variable">@all-devs</span>   =   <span class="variable">@staff</span> <span class="variable">@interns</span>
+</code></pre><p>Finally, @all is a special group name that is often convenient to use if<br>you really mean “all repos” or “all users”.</p>
+<h2 id="commands">commands</h2><p>Users can run certain commands remotely, using ssh.  Running</p>
+<pre><code>ssh git<span class="variable">@host</span> <span class="keyword">help</span>
+</code></pre><p>prints a list of available commands.</p>
+<p>The most commonly used command is “info”.  All commands respond to a<br>single argument of “-h” with suitable information.</p>
+<p>If you have shell on the server, you have a lot more commands available to<br>you; try running “gitolite help”.</p>
+<!-- --------------------------------------------------------------------- -->
+<h2 id="LICENSE">LICENSE</h2><h1 id="contact_and_support">contact and support</h1><p>Please see <a href="http://gitolite.com/gitolite/#contact" target="_blank" rel="external">http://gitolite.com/gitolite/#contact</a> for mailing list and IRC<br>info.</p>
+<h1 id="license">license</h1><p>The gitolite software is copyright Sitaram Chamarty and is licensed under the<br>GPL v2; please see the file called COPYING in the source distribution.</p>
+<p>Please see <a href="http://gitolite.com/gitolite/#license" target="_blank" rel="external">http://gitolite.com/gitolite/#license</a> for more.</p>
+<blockquote>
+<hr>
+<p>  <strong>NOTE</strong>: GIT is a trademark of Software Freedom Conservancy and my use of<br>  “Gitolite” is under license.</p>
+<hr>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cigvlwbit001cuchji2va5ccp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-scm-command-line" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/23/scm-command-line/" class="article-date">
@@ -219,7 +387,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cigj4cp8u000316hjqjz6fe0k" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cigvlwbhh0003uchj1yx0tu4b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -341,7 +509,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cigj4cp8x000716hju7ynrylg" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cigvlwbi00007uchjbzlmhxdf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -427,7 +595,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cigj4cp9b000d16hjauj1bxj7" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cigvlwbi3000duchj62ihgv4r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -539,7 +707,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cigj4cp9r001516hjf8xwqpmq" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cigvlwbiq0018uchj3px4cmia" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -651,7 +819,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cigj4cp9m000v16hj6u97nxdt" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cigvlwbik000yuchjbsrmt825" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -701,7 +869,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cigj4cp9c000i16hjx5sc4150" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cigvlwbi4000iuchj820xeb27" class="article-share-link">Share</a>
       
       
     </footer>
@@ -736,7 +904,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libusb-win32/">libusb-win32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libusb-win32/">libusb-win32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mingw-cross-compile/">mingw cross-compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -745,7 +913,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/libusb-win32/" style="font-size: 10px;">libusb-win32</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/libusb-win32/" style="font-size: 10px;">libusb-win32</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mingw-cross-compile/" style="font-size: 10px;">mingw cross-compile</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -754,7 +922,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -764,6 +932,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/">compile binary fow windows on linux with mingw</a>
+          </li>
         
           <li>
             <a href="/2015/11/03/add-libusb-win32-to-vc-project/">add libusb-win32 to vc project</a>
@@ -779,10 +951,6 @@ Author:
         
           <li>
             <a href="/2015/10/15/Log-on-as-Administrator-in-win8/">Log on as Administrator in win8</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/29/porting-cyanogenmod/">porting cyanogenmod</a>
           </li>
         
       </ul>

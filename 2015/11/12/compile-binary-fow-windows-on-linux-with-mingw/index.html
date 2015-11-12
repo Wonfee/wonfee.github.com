@@ -3,17 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives | Wonfee&#39;s HomePage</title>
+  <title>compile binary fow windows on linux with mingw | Wonfee&#39;s HomePage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wonfee's HomePage">
-<meta property="og:url" content="http://wonfee.github.io/archives/page/2/index.html">
+  <meta name="description" content="with mingw we can compile 3rd party project for windows on linux.compile openssl for example:参考： OpenSSL for Windows
+
+setup cross compile environment. sudo apt-get install mingw-w64 binutils-mingw-w64">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile binary fow windows on linux with mingw">
+<meta property="og:url" content="http://wonfee.github.io/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/index.html">
 <meta property="og:site_name" content="Wonfee's HomePage">
-<meta property="og:description">
+<meta property="og:description" content="with mingw we can compile 3rd party project for windows on linux.compile openssl for example:参考： OpenSSL for Windows
+
+setup cross compile environment. sudo apt-get install mingw-w64 binutils-mingw-w64">
+<meta property="og:updated_time" content="2015-11-12T02:18:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Wonfee's HomePage">
-<meta name="twitter:description">
+<meta name="twitter:title" content="compile binary fow windows on linux with mingw">
+<meta name="twitter:description" content="with mingw we can compile 3rd party project for windows on linux.compile openssl for example:参考： OpenSSL for Windows
+
+setup cross compile environment. sudo apt-get install mingw-w64 binutils-mingw-w64">
   
     <link rel="alternative" href="/atom.xml" title="Wonfee&#39;s HomePage" type="application/atom+xml">
   
@@ -63,153 +70,89 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/27/Gitolite-README/" class="archive-article-date">
-  <time datetime="2015-06-27T05:27:33.000Z" itemprop="datePublished">6月 27</time>
+        <section id="main"><article id="post-compile-binary-fow-windows-on-linux-with-mingw" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/" class="article-date">
+  <time datetime="2015-11-12T02:17:18.000Z" itemprop="datePublished">2015-11-12</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/27/Gitolite-README/">Gitolite README</a>
+    <h1 class="article-title" itemprop="name">
+      compile binary fow windows on linux with mingw
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/23/scm-command-line/" class="archive-article-date">
-  <time datetime="2015-06-23T08:06:09.000Z" itemprop="datePublished">6月 23</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/23/scm-command-line/">scm command line</a>
-    </h1>
-  
+        <h2 id="with_mingw_we_can_compile_3rd_party_project_for_windows_on_linux-">with mingw we can compile 3rd party project for windows on linux.</h2><p>compile openssl for example:<br>参考： <a href="http://www.blogcompiler.com/2011/12/21/openssl-for-windows/" target="_blank" rel="external">OpenSSL for Windows</a></p>
+<ol>
+<li><p>setup cross compile environment.<br> sudo apt-get install mingw-w64 binutils-mingw-w64</p>
+</li>
+<li><p>download openssl source code<br> git clone <a href="https://github.com/openssl/openssl.git" target="_blank" rel="external">https://github.com/openssl/openssl.git</a></p>
+</li>
+<li><p>cross compile with mingw<br> cd openssl<br> ./Configure —cross-compile-prefix=i686-w64-mingw32- mingw64 no-asm shared —prefix=xxx<br> make<br> make install</p>
+<p> ├── bin<br> │   ├── c_rehash<br> │   ├── libeay32.dll<br> │   ├── openssl.exe<br> │   └── ssleay32.dll<br> ├── include<br> │   └── openssl<br> ├── lib<br> │   ├── engines<br> │   ├── libcrypto.a<br> │   ├── libcrypto.dll.a<br> │   ├── libssl.a<br> │   ├── libssl.dll.a<br> │   └── pkgconfig<br> └── ssl</p>
+<pre><code>├── certs
+├── <span class="keyword">man</span>
+├── misc
+├── openssl.cnf
+└── private
+</code></pre></li>
+</ol>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/23/linux-driver-module/" class="archive-article-date">
-  <time datetime="2015-06-23T06:30:17.000Z" itemprop="datePublished">6月 23</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/23/linux-driver-module/">linux_driver_module</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/20/hexo-install/" class="archive-article-date">
-  <time datetime="2015-06-20T05:57:35.000Z" itemprop="datePublished">6月 20</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/" data-id="cigvlwbi5000juchj7zp75t7i" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/20/hexo-install/">hexo install</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/20/Linux-0-11-compile/" class="archive-article-date">
-  <time datetime="2015-06-20T03:46:49.000Z" itemprop="datePublished">6月 20</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/20/Linux-0-11-compile/">Linux-0.11 compile</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mingw-cross-compile/">mingw cross-compile</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/19/My-First-Post/" class="archive-article-date">
-  <time datetime="2015-06-19T08:10:59.000Z" itemprop="datePublished">6月 19</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/19/My-First-Post/">Markdown 常用语法</a>
-    </h1>
   
+    <a href="/2015/11/03/add-libusb-win32-to-vc-project/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">add libusb-win32 to vc project</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/06/19/hello-world/" class="archive-article-date">
-  <time datetime="2015-06-19T07:30:30.000Z" itemprop="datePublished">6月 19</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/19/hello-world/">Hello World</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+
+
+
+<section id="comments">
+  <!-- Duoshuo Comment BEGIN -->
+  <div class="ds-thread"></div>
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"wonfee"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = 'http://static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+          || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+  </script>
+<!-- Duoshuo Comment END -->
+</section>
+
 </section>
         
           <aside id="sidebar">
