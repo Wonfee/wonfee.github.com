@@ -65,6 +65,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-cmds-daily-use" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/16/cmds-daily-use/" class="article-date">
+  <time datetime="2015-08-16T02:49:29.000Z" itemprop="datePublished">2015-08-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/16/cmds-daily-use/">cmds_daily_use</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="split大文件分割与合并">split大文件分割与合并</h3><p>分割：<br>split -b 800M VS2012_ULT_chs.iso VS2012_ULT_chs.iso<br>    1.6G Jun 24 10:54 VS2012_ULT_chs.iso<br>    800M Jun 24 17:16 VS2012_ULT_chs.isoaa<br>    768M Jun 24 17:16 VS2012_ULT_chs.isoab<br>合并：<br>cat VS2012_ULT_chs.isoa* &gt; VS2012_ULT_chs.iso</p>
+<h3 id="ubuntu_apt_install_software">ubuntu apt install software</h3><p>apt-cache search xxx<br>sudo apt-get install xxx</p>
+<h3 id="search_cmd_belond_to_which_package">search cmd belond to which package</h3><p>dpkg -S `cmd`</p>
+<pre><code>dpkg -S \`<span class="keyword">which</span> <span class="keyword">ls</span>\`
+coreutils: /bin/<span class="keyword">ls</span>
+</code></pre><p>dpkg -L coreutils<br>/.<br>/bin<br>/bin/sync<br>/bin/cp<br>/bin/dir<br>/bin/mknod<br>/bin/cat<br>/bin/rm<br>/bin/rmdir<br>/bin/sleep<br>/bin/date<br>/bin/ls<br>…</p>
+<h3 id="打包压缩">打包压缩</h3><p>tar cvf xxx.tar xxx<br>tar zcvf xxx.tar.gz xxx         tar cvf xxx.tar xxx; gzip xxx.tar<br>tar jcvf xxx.tar.bz2 xxx        tar cvf xxx.tar xxx; bzip2 -z xxx.tar</p>
+<h3 id="解包解压">解包解压</h3><p>tar xvf  xxx.tar<br>tar zxvf xxx.tar.gz             gizp -d xxx.tar.gz; tar xvf xxx.tar<br>tar jxvf xxx.tar.bz2            bzip2 -d xxx.tar.bz2; tar xvf xxx.tar</p>
+<h3 id="查看内容">查看内容</h3><p>tar tvf  xxx.tar<br>tar ztvf xxx.gz<br>tar jtvf xxx.bz2</p>
+<h3 id="zip_加密">zip 加密</h3><p>zip -e secure.zip -r files_to_incrypt</p>
+<h3 id="sed_advanced_usage">sed advanced usage</h3><pre><code>sed <span class="string">'G'</span> <span class="built_in">file</span>        <span class="comment">#行间插入空行</span>
+sed <span class="string">'$!G'</span> <span class="built_in">file</span>      <span class="comment">#don't insert to the endline</span>
+</code></pre><p>sed ‘/^$/d; $!G’ file   #first delete all space lines and the insert a space line</p>
+<pre><code>sed <span class="string">'='</span> <span class="keyword">file</span>            #add <span class="built_in">line</span> <span class="keyword">number</span>
+sed <span class="string">'='</span> <span class="keyword">file</span> | sed <span class="string">'N; s/\n/ /'</span> #add <span class="built_in">line</span> <span class="keyword">number</span> <span class="keyword">to</span> <span class="built_in">line</span> start
+
+sed -<span class="keyword">n</span> <span class="string">'$p'</span> <span class="keyword">file</span> # <span class="keyword">print</span> <span class="keyword">last</span> <span class="built_in">line</span>
+</code></pre><p>sed ‘{:start; $q; N; 11,$D; b start}’ file  #首先检查是不是数据流中的最后一行，如果是，quit命令会停止循环N命令会将下一行附加到模式空间的当前行后，如果当前行在第10行后面，11,$D命令会删除模式空间中的第一行。</p>
+<pre><code><span class="title">sed</span> <span class="string">'/./,/^$/!d'</span> <span class="comment">#区间开始会匹配任何含有至少一个字符的行，区间的结束地址会匹配一个空行，在这个区间内的行不会被删除。用于删除多余空白行，只保留一个空白行</span>
+
+sed <span class="string">'/./,$!d'</span> <span class="comment">#删除顶部空白行，从含有字符行开始，一直到数据流结束，之间的行都不会被删除。</span>
+</code></pre><p>sed ‘{:start; /^\n*$/{$d; N; b start}}’ #删除行尾空白行</p>
+<pre><code>sed 's/<span class="variable">&lt;[^&gt;</span>]<span class="keyword">*</span>&gt;//g' <span class="comment">#删除HTML标签</span>
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://wonfee.github.io/2015/08/16/cmds-daily-use/" data-id="cih0e9aw5000m3xhjldt7isf7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell-cmds/">shell cmds</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+
+  
     <article id="post-Gitolite-README" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/06/27/Gitolite-README/" class="article-date">
@@ -218,7 +282,7 @@ repo foss
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cigvlwbit001cuchji2va5ccp" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/27/Gitolite-README/" data-id="cih0e9awl001f3xhjh50317cm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitolite/">gitolite</a></li></ul>
@@ -387,7 +451,7 @@ git checkout <span class="built_in">tag</span>    切换到某个标签
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cigvlwbhh0003uchj1yx0tu4b" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/scm-command-line/" data-id="cih0e9avl00033xhjp6c1w2cw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a></li></ul>
@@ -509,7 +573,7 @@ make: Leaving directory `/usr/src/linux-lts-utopic-3.16.0'
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cigvlwbi00007uchjbzlmhxdf" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/23/linux-driver-module/" data-id="cih0e9avx00073xhjmj8hdzk5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -595,7 +659,7 @@ js node_modules<span class="regexp">/hexo/</span>bin/hexo d
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cigvlwbi3000duchj62ihgv4r" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/hexo-install/" data-id="cih0e9aw1000d3xhjjtnpr2sf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/personal-blog/">personal blog</a></li></ul>
@@ -707,7 +771,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cigvlwbiq0018uchj3px4cmia" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/20/Linux-0-11-compile/" data-id="cih0e9awi001b3xhjfhzrzdkl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -819,7 +883,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cigvlwbik000yuchjbsrmt825" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/My-First-Post/" data-id="cih0e9awe00113xhj7mbqfldu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
@@ -869,7 +933,7 @@ Author:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cigvlwbi4000iuchj820xeb27" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/06/19/hello-world/" data-id="cih0e9aw2000i3xhjjnlwy1kj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -904,7 +968,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libusb-win32/">libusb-win32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mingw-cross-compile/">mingw cross-compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-Android/">CyanogenMod Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CyanogenMod-android-build/">CyanogenMod android build</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitolite/">gitolite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k3v2oem1-kernel/">k3v2oem1 kernel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libusb-win32/">libusb-win32</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/makefile-linux/">makefile linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mingw-cross-compile/">mingw cross-compile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/personal-blog/">personal blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reverse-tools/">reverse tools</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm-git-svn/">scm, git, svn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell-cmds/">shell cmds</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/syscall/">syscall</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win8-administrator/">win8 administrator</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -913,7 +977,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/libusb-win32/" style="font-size: 10px;">libusb-win32</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mingw-cross-compile/" style="font-size: 10px;">mingw cross-compile</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
+      <a href="/tags/CyanogenMod-Android/" style="font-size: 10px;">CyanogenMod Android</a> <a href="/tags/CyanogenMod-android-build/" style="font-size: 10px;">CyanogenMod android build</a> <a href="/tags/gitolite/" style="font-size: 10px;">gitolite</a> <a href="/tags/hexo/" style="font-size: 20px;">hexo</a> <a href="/tags/k3v2oem1-kernel/" style="font-size: 10px;">k3v2oem1 kernel</a> <a href="/tags/libusb-win32/" style="font-size: 10px;">libusb-win32</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/makefile-linux/" style="font-size: 10px;">makefile linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mingw-cross-compile/" style="font-size: 10px;">mingw cross-compile</a> <a href="/tags/personal-blog/" style="font-size: 10px;">personal blog</a> <a href="/tags/reverse-tools/" style="font-size: 10px;">reverse tools</a> <a href="/tags/scm-git-svn/" style="font-size: 10px;">scm, git, svn</a> <a href="/tags/shell-cmds/" style="font-size: 10px;">shell cmds</a> <a href="/tags/syscall/" style="font-size: 10px;">syscall</a> <a href="/tags/win8-administrator/" style="font-size: 10px;">win8 administrator</a>
     </div>
   </div>
 
@@ -922,7 +986,7 @@ Author:
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -932,6 +996,10 @@ Author:
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/11/15/add-system-call-to-linux/">add system call to linux</a>
+          </li>
         
           <li>
             <a href="/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/">compile binary fow windows on linux with mingw</a>
@@ -947,10 +1015,6 @@ Author:
         
           <li>
             <a href="/2015/10/15/android-reverse-tools/">android reverse tools</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/15/Log-on-as-Administrator-in-win8/">Log on as Administrator in win8</a>
           </li>
         
       </ul>

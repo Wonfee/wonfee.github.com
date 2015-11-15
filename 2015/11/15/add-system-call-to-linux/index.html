@@ -3,24 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>android reverse tools | Wonfee&#39;s HomePage</title>
+  <title>add system call to linux | Wonfee&#39;s HomePage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="tools are in my github    git@github.com:Wonfee/android-reverse-tools.git
-apk modifya. apktoolapktool官网usage:    apktool d xx.apk    apktool b xxb. baksmali/smali    baksmali github
-apk resignsignapk">
+  <meta name="description" content="添加系统系统到内核，测试环境huawei u9508手机，基于内核代码huawei u9508 kernel
+
+修改 arch/arm/kernel/calls.S
+ diff —git a/arch/arm/kernel/calls.S b/arch/arm/kernel/calls.S index 80f7896..100320f 100644 —- a/arch/arm/kernel/cal">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android reverse tools">
-<meta property="og:url" content="http://wonfee.github.io/2015/10/15/android-reverse-tools/index.html">
+<meta property="og:title" content="add system call to linux">
+<meta property="og:url" content="http://wonfee.github.io/2015/11/15/add-system-call-to-linux/index.html">
 <meta property="og:site_name" content="Wonfee's HomePage">
-<meta property="og:description" content="tools are in my github    git@github.com:Wonfee/android-reverse-tools.git
-apk modifya. apktoolapktool官网usage:    apktool d xx.apk    apktool b xxb. baksmali/smali    baksmali github
-apk resignsignapk">
-<meta property="og:updated_time" content="2015-10-15T09:56:32.000Z">
+<meta property="og:description" content="添加系统系统到内核，测试环境huawei u9508手机，基于内核代码huawei u9508 kernel
+
+修改 arch/arm/kernel/calls.S
+ diff —git a/arch/arm/kernel/calls.S b/arch/arm/kernel/calls.S index 80f7896..100320f 100644 —- a/arch/arm/kernel/cal">
+<meta property="og:updated_time" content="2015-11-15T10:43:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android reverse tools">
-<meta name="twitter:description" content="tools are in my github    git@github.com:Wonfee/android-reverse-tools.git
-apk modifya. apktoolapktool官网usage:    apktool d xx.apk    apktool b xxb. baksmali/smali    baksmali github
-apk resignsignapk">
+<meta name="twitter:title" content="add system call to linux">
+<meta name="twitter:description" content="添加系统系统到内核，测试环境huawei u9508手机，基于内核代码huawei u9508 kernel
+
+修改 arch/arm/kernel/calls.S
+ diff —git a/arch/arm/kernel/calls.S b/arch/arm/kernel/calls.S index 80f7896..100320f 100644 —- a/arch/arm/kernel/cal">
   
     <link rel="alternative" href="/atom.xml" title="Wonfee&#39;s HomePage" type="application/atom+xml">
   
@@ -70,10 +73,10 @@ apk resignsignapk">
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-android-reverse-tools" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-add-system-call-to-linux" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/10/15/android-reverse-tools/" class="article-date">
-  <time datetime="2015-10-15T09:56:01.000Z" itemprop="datePublished">2015-10-15</time>
+    <a href="/2015/11/15/add-system-call-to-linux/" class="article-date">
+  <time datetime="2015-11-15T10:42:22.000Z" itemprop="datePublished">2015-11-15</time>
 </a>
     
   </div>
@@ -84,7 +87,7 @@ apk resignsignapk">
         
   
     <h1 class="article-title" itemprop="name">
-      android reverse tools
+      add system call to linux
     </h1>
   
 
@@ -92,21 +95,111 @@ apk resignsignapk">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>tools are in my github<br>    git@github.com:Wonfee/android-reverse-tools.git</p>
-<h2 id="apk_modify">apk modify</h2><p>a. apktool<br><a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="external">apktool官网</a><br>usage:<br>    apktool d xx.apk<br>    apktool b xx<br>b. baksmali/smali<br>    <a href="https://github.com/JesusFreke/smali" target="_blank" rel="external">baksmali github</a></p>
-<h2 id="apk_resign">apk resign</h2><pre><code><span class="tag">signapk</span> <span class="tag">xx</span><span class="class">.apk</span>
-</code></pre><h2 id="boot-img_recovery-img_unpack_repack">boot.img recovery.img unpack repack</h2><p>a. use android source code tools otatools</p>
-<p>b. abootimg<br>    $ apt-cache search abootimg<br>    abootimg - Tool to read/write/update android boot images<br>    $ sudo apt-get install abootimg<br>    $ abootimg -i boot.img </p>
-<p>c. mkboot<br>    <a href="https://github.com/xiaolu/mkbootimg_tools.git" target="_blank" rel="external">mkbootimg_tools github地址</a><br>    which fix dtb missing when use abootimg tool to unpack boot.img or recovery.img</p>
-<h2 id="how_to_use">how to use</h2><p>just set environment then enjoy it …</p>
+        <p>添加系统系统到内核，测试环境huawei u9508手机，基于内核代码<a href="git@github.com:Wonfee/huawei_u9508_kernel.git">huawei u9508 kernel</a></p>
+<ol>
+<li><p>修改 arch/arm/kernel/calls.S</p>
+<p> diff —git a/arch/arm/kernel/calls.S b/arch/arm/kernel/calls.S<br> index 80f7896..100320f 100644<br> —- a/arch/arm/kernel/calls.S<br> +++ b/arch/arm/kernel/calls.S<br> @@ -385,6 +385,7 @@</p>
+<pre><code><span class="function"><span class="title">CALL</span><span class="params">(sys_syncfs)</span></span>
+<span class="function"><span class="title">CALL</span><span class="params">(sys_sendmmsg)</span></span>
+</code></pre><p>  /<em> 375 </em>/      CALL(sys_setns)</p>
+<ul>
+<li>CALL(sys_hello)<h1 id="ifndef_syscalls_counted">ifndef syscalls_counted</h1>.equ syscalls_padding, ((NR_syscalls + 3) &amp; ~3) - NR_syscalls<h1 id="define_syscalls_counted">define syscalls_counted</h1></li>
+</ul>
+</li>
+<li><p>修改 include/linux/syscalls.h</p>
+<p> diff —git a/include/linux/syscalls.h b/include/linux/syscalls.h<br> index 8c03b98..ca05033 100644<br> —- a/include/linux/syscalls.h<br> +++ b/include/linux/syscalls.h<br> @@ -847,4 +847,5 @@ asmlinkage long sys_open_by_handle_at(int mountdirfd,</p>
+<pre><code><span class="keyword">struct</span> file_handle __user *<span class="keyword">handle</span>,
+<span class="built_in">int</span> flags);
+</code></pre><p>  asmlinkage long sys_setns(int fd, int nstype);<br> +asmlinkage long sys_hello(void);</p>
+<h1 id="endif">endif</h1></li>
+<li><p>修改 arch/arm/include/asm/unistd.h</p>
+<p> diff —git a/arch/arm/include/asm/unistd.h b/arch/arm/include/asm/unistd.h<br> index 2c04ed5..fa6cc69 100644<br> —- a/arch/arm/include/asm/unistd.h<br> +++ b/arch/arm/include/asm/unistd.h<br> @@ -402,6 +402,7 @@</p>
+<h1 id="define_NR_syncfs_(NR_SYSCALL_BASE+373)">define <strong>NR_syncfs                    (</strong>NR_SYSCALL_BASE+373)</h1><h1 id="define_NR_sendmmsg_(NR_SYSCALL_BASE+374)">define <strong>NR_sendmmsg                  (</strong>NR_SYSCALL_BASE+374)</h1><h1 id="define_NR_setns_(NR_SYSCALL_BASE+375)">define <strong>NR_setns                     (</strong>NR_SYSCALL_BASE+375)</h1><p> +#define <strong>NR_sys_hello                 (</strong>NR_SYSCALL_BASE+376)</p>
+<p>  /*</p>
+<ul>
+<li>The following SWIs are ARM private.</li>
+</ul>
+</li>
+<li><p>在kernel下添加hello目录，并添加hello.c, Makefile</p>
+<p> hello/<br> ├── hello.c<br> └── Makefile</p>
+</li>
+</ol>
+<p>vim hello.c</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span>
+<span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_hello</span><span class="params">(<span class="keyword">void</span>)</span> 
+</span>{
+    printk(<span class="string">"hello world\n"</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>vim Makefile</p>
+<pre><code><span class="rule"><span class="attribute">obj-y </span>:<span class="value">= hello.o</span></span>
+</code></pre><ol>
+<li><p>修改kernel下Makefile</p>
+<p> diff —git a/Makefile b/Makefile<br> index 9651e1c..3e54a62 100755<br> —- a/Makefile<br> +++ b/Makefile<br> @@ -719,7 +719,7 @@ export mod_strip_cmd</p>
+</li>
+</ol>
+<pre><code> ifeq (<span class="variable">$(</span>KBUILD_EXTMOD),)
+-core-y         += kernel/ mm/ fs/ ipc/ security/ crypto/ block/
++core-y         += kernel/ mm/ fs/ ipc/ security/ crypto/ block/ hello/
+
+ vmlinux-dirs   := <span class="variable">$(</span>patsubst <span class="variable">%/</span>,<span class="variable">%,</span><span class="variable">$(</span><span class="keyword">filter</span> <span class="variable">%/</span>, <span class="variable">$(</span>init-y) <span class="variable">$(</span>init-m) \
+                     <span class="variable">$(</span>core-y) <span class="variable">$(</span>core-m) <span class="variable">$(</span>drivers-y) <span class="variable">$(</span>drivers-m) \
+</code></pre><ol>
+<li><p>编译内核</p>
+<p> export CROSS_COMPILE=arm-linux-androideabi-<br> export ARCH=arm<br> make distclean<br> make hisi_k3v2oem1_defconfig<br> make zImage</p>
+</li>
+<li><p>modify boot.img with our build zImage<br> mkboot boot.img boot<br> ….<br> mkboot boot boot_new.img<br> adb reboot bootloader<br> fastboot flash boot boot_new.img<br> fastboot reboot</p>
+</li>
+<li><p>测试添加的系统调用</p>
+<p> jni/<br> ├── Android.mk<br> └── sys_hello.cpp</p>
+</li>
+</ol>
+<p>vim sys_hello.cpp</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;linux/kernel.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;sys/syscall.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;unistd.h&gt;</span>
+
+<span class="preprocessor">#<span class="keyword">define</span> __NR_hello 376</span>
+
+<span class="function"><span class="keyword">long</span> <span class="title">hello_syscall</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    <span class="keyword">return</span> syscall(__NR_hello);
+}
+
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span>
+</span>{
+    <span class="keyword">long</span> <span class="keyword">int</span> a = hello_syscall();
+    <span class="built_in">printf</span>(<span class="string">"System call returned %ld\n"</span>, a);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>vim Android.mk</p>
+<pre><code><span class="constant">LOCAL_PATH </span><span class="symbol">:</span>= <span class="variable">$(</span>call my-dir)
+
+<span class="keyword">include</span> <span class="variable">$(</span><span class="constant">CLEAR_VARS)</span>
+
+<span class="constant">LOCAL_SRC_FILES </span>+= sys_hello.cpp
+
+<span class="constant">LOCAL_MODULE </span><span class="symbol">:</span>= hello
+<span class="keyword">include</span> <span class="variable">$(</span><span class="constant">BUILD_EXECUTABLE)</span>
+</code></pre><p>ndk-build</p>
+<pre><code><span class="string">StaticLibrary  :</span> libstdc++.a
+<span class="string">Executable     :</span> hello
+<span class="string">Install        :</span> hello =&gt; libs<span class="regexp">/armeabi/</span>hello
+</code></pre><p>adb push libs/armeabi/hello /data/local/tmp/<br>adb shell</p>
+<pre><code>root<span class="variable">@android</span><span class="symbol">:/data/local/tmp</span> <span class="comment"># ./hello                                         </span>
+<span class="constant">System </span>call returned <span class="number">0</span>
+root<span class="variable">@android</span><span class="symbol">:/data/local/tmp</span> <span class="comment"># dmesg                                           </span>
+&lt;<span class="number">4</span>&gt;[<span class="number">5494.1</span>, hello] [ <span class="number">1911.446306</span>] hello world
+</code></pre><p>以上针对arm平台添加的系统调用，若为x86平台，则需要将1,2,3步修改为x86目录下相应的文件即可;<br>参考： <a href="http://techeclipse.com/how-to/linux-kernel/" target="_blank" rel="external">How To Add A System Call and Recompile the Linux Kernel</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://wonfee.github.io/2015/10/15/android-reverse-tools/" data-id="cih0e9aw9000s3xhj0irbnci1" class="article-share-link">Share</a>
+      <a data-url="http://wonfee.github.io/2015/11/15/add-system-call-to-linux/" data-id="cih0e9awb000v3xhj3vl0ndcp" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reverse-tools/">reverse tools</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/syscall/">syscall</a></li></ul>
 
     </footer>
   </div>
@@ -114,19 +207,10 @@ apk resignsignapk">
     
 <nav id="article-nav">
   
-    <a href="/2015/10/19/huawei-k3v2oem1-kernel-compile/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          huawei k3v2oem1 kernel compile
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/10/15/Log-on-as-Administrator-in-win8/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/11/12/compile-binary-fow-windows-on-linux-with-mingw/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Log on as Administrator in win8</div>
+      <div class="article-nav-title">compile binary fow windows on linux with mingw</div>
     </a>
   
 </nav>
